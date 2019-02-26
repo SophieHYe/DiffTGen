@@ -26,10 +26,10 @@ public class Global
 	timer = new Timer();
 	bugid = "bugukn";
 	repairtool = "repairtoolukn";
-	difftgendpath = "/home/qx5/testgen-evosuite";
-	scriptrootdpath = "/data/people/qx5/testgen/scripts";
-	d4jprojdpath = "/data/people/qx5/defects4j-bugs/train_samples/projs";
-	evosuitejpath = "/data/people/qx5/evosuite-1.0.2.jar";
+	difftgendpath = "DiffTGen path is not defined";
+	scriptrootdpath = "Script root path is not defined";
+	d4jprojdpath = "d4j path is not defined";
+	evosuitejpath = "evosuite path is not defined";
 	dependjpath = null;
 	outputdpath = null;
 	inputfpath = null;
