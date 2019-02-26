@@ -28,8 +28,8 @@ public class Global
 	repairtool = "repairtoolukn";
 	difftgendpath = "DiffTGen path is not defined";
 	scriptrootdpath = "Script root path is not defined";
-	d4jprojdpath = "d4j path is not defined";
-	evosuitejpath = "evosuite path is not defined";
+	d4jprojdpath = "D4j path is not defined";
+	evosuitejpath = "Evosuite path is not defined";
 	dependjpath = null;
 	outputdpath = null;
 	inputfpath = null;
