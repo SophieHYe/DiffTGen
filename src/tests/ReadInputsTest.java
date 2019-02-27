@@ -26,5 +26,11 @@ public class ReadInputsTest {
 	        assertTrue(ex.getMessage().contains("Errors in reading file:"));
 		}
 	}
+	
+	@Test
+	public void readOraclesucc() {
+		List<String> input = ReadInputs.readLine("./examples/chart1jgenprog_oracle.txt");
+		assertEquals(1,input.size());
+	}
 
 }
