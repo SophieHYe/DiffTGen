@@ -55,23 +55,12 @@ public class Main
     int trials = Global.evosuitetrials;
     int timeout = Global.evosuitetimeout;
 
+	/**
+	 * Read content from inputfpath and oracleinputfpath.
+	 */
+	List<String> inputDeltas = ReadInputs.readLine(inputfpath);
+	List<String> oracles = ReadInputs.readLine(oracleinputfpath);
 	
-	List<String> inputDeltas = null;
-	List<String> oracles = null;
-	try { inputDeltas = FileUtils.readLines(new File(inputfpath), (String)null); }
-	catch (Throwable t) {
-	    System.err.println(t);
-	    t.printStackTrace();
-	}
-	if (inputDeltas == null) { return; }
-	
-	try { oracles = FileUtils.readLines(new File(oracleinputfpath), (String)null); }
-	catch (Throwable t) {
-	    System.err.println(t);
-	    t.printStackTrace();
-	}
-	if (oracles == null) { return; }
-
 
 	List<Modification> mod_list = SynDeltaParser.parse(inputDeltas);
 	List<MethodToBeInstrumented> oracle_med_instru_list = OracleParser.parse(oracles);
