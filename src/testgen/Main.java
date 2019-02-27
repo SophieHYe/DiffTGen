@@ -34,179 +34,26 @@ public class Main
 	if (cmd_line == null) { 
 		return; 
 	}
-
-	String bugid = null;
-	String repairtool = null;
-	String dependjpath = null;
-	String inputfpath = null;
-	String outputdpath = null;
-	int trials = -1, timeout = -1;
-	String oracleinputfpath = null;
+	/**
+	 * validate the parameters
+	 */
+	CmdLineCheck.verifyEmpty(cmd_line);
 	
-	if (cmd_line.hasOption("bugid")) {
-	    String value = cmd_line.getOptionValue("bugid");
-	    System.out.println("Bug ID: " + value);
-	    Global.bugid = value;
-	    bugid = value;
-	}
-	else {
-	    System.out.println("Bug ID: " + Global.bugid);
-	}
-
-	if (cmd_line.hasOption("repairtool")) {
-	    String value = cmd_line.getOptionValue("repairtool");
-	    System.out.println("Repair Tool: " + value);
-	    Global.repairtool = value;
-	    repairtool = value;
-	}
-	else {
-	    System.out.println("Repair Tool: " + Global.repairtool);
-	}
-
-	if (cmd_line.hasOption("difftgendpath")) {
-	    String value = cmd_line.getOptionValue("difftgendpath");
-	    System.out.println("DiffTGen Dir: " + value);
-	    Global.difftgendpath = value;
-	}
-	else {
-	    System.out.println("DiffTGen Dir: " + Global.difftgendpath);
-	}
-	
-	if (cmd_line.hasOption("evosuitejpath")) {
-	    String value = cmd_line.getOptionValue("evosuitejpath");
-	    System.out.println("EvoSuite Jar File: " + value);
-	    Global.evosuitejpath = value;
-	}
-	else {
-	    System.out.println("EvoSuite Jar File: " + Global.evosuitejpath);
-	}
-
-	if (cmd_line.hasOption("dependjpath")) {
-	    String value = cmd_line.getOptionValue("dependjpath");
-	    System.out.println("Dependency Jar File: " + value);
-	    dependjpath = value;
-	    Global.dependjpath = value;
-	}
-	else {
-	    System.out.println("Dependency Jar File: " + Global.dependjpath);
-	}
-	
-	if (cmd_line.hasOption("outputdpath")) {
-	    String value = cmd_line.getOptionValue("outputdpath");
-	    System.out.println("Output Directory: " + value);
-	    Global.outputdpath = value;
-	    outputdpath = value;
-	}
-	else {
-	    System.out.println("Output Directory: " + Global.outputdpath);
-	}
-
-	if (cmd_line.hasOption("inputfpath")) {
-	    String value = cmd_line.getOptionValue("inputfpath");
-	    System.out.println("Input File: " + value);
-	    Global.inputfpath = value;
-	    inputfpath = value;
-	}
-	else {
-	    System.out.println("Input File: " + Global.inputfpath);
-	}
-
-	if (cmd_line.hasOption("oracleinputfpath")) {
-	    String value = cmd_line.getOptionValue("oracleinputfpath");
-	    System.out.println("Oracle Input File: " + value);
-	    Global.oracleinputfpath = value;
-	    oracleinputfpath = value;
-	}
-	else {
-	    System.out.println("Oracle Input File: " + Global.oracleinputfpath);
-	}
-	
-	if (cmd_line.hasOption("evosuitetrials")) {
-	    String value = cmd_line.getOptionValue("evosuitetrials");
-	    System.out.println("EvoSuite Trials: " + value);
-	    trials = Integer.parseInt(value);
-	    Global.evosuitetrials = trials;
-	}
-	else {
-	    trials = Global.evosuitetrials;
-	    System.out.println("EvoSuite Trials: " + trials);
-	}
-
-	if (cmd_line.hasOption("evosuitetimeout")) {
-	    String value = cmd_line.getOptionValue("evosuitetimeout");
-	    System.out.println("Evosuite Timeout (in sec.): " + value);
-	    timeout = Integer.parseInt(value);
-	    Global.evosuitetimeout = timeout;
-	}
-	else {
-	    timeout = Global.evosuitetimeout;
-	    System.out.println("Evosuite Timeout (in sec.): " + timeout);
-	}
-	
-	if (cmd_line.hasOption("forcecompile")) {
-	    System.out.println("Force to Compile Files: " + true);
-	    Global.forcecompile = true;
-	}
-	else {
-	    System.out.println("Force to Compile Files: " + Global.forcecompile);
-	}
-
-	if (cmd_line.hasOption("runparallel")) {
-	    System.out.println("Run Parallel: " + true);
-	    Global.runparallel = true;
-	}
-	else {
-	    System.out.println("Run Parallel: " + Global.runparallel);
-	}
-
-	if (cmd_line.hasOption("simpletarget")) {
-	    System.out.println("Simple Target: " + true);
-	    Global.simpletarget = true;
-	}
-	else {
-	    System.out.println("Use Simple Target: " + Global.simpletarget);
-	}
-
-	if (cmd_line.hasOption("stopifoverfittingfound")) {
-	    System.out.println("Stop if Overfitting Patches Found: " + true);
-	    Global.stopifoverfittingfound = true;
-	}
-	else {
-	    System.out.println("Stop if Overfitting Patches Found: " + Global.stopifoverfittingfound);
-	}
-
-	if (cmd_line.hasOption("runevosuite")) {
-	    System.out.println("Run EvoSuite: " + true);
-	    Global.runevosuite = true;
-	}
-	else {
-	    System.out.println("Run EvoSuite: " + Global.runevosuite);
-	}
-
-	if (bugid == null) {
-	    System.err.println("Bug ID is Null.");
-	    return;
-	}
-	if (repairtool == null) {
-	    System.err.println("Repair Tool is Null.");
-	    return;
-	}
-	if (dependjpath == null) {
-	    System.err.println("Dependency Jar File Path is Null.");
-	    return;
-	}
-	if (inputfpath == null) {
-	    System.err.println("Input File Path is Null.");
-	    return;
-	}
-	if (outputdpath == null) {
-	    System.err.println("Output Directory Path is Null.");
-	    return;
-	}
-	if (oracleinputfpath == null) {
-	    System.err.println("Oracle Input File Path is Null.");
-	    return;
-	}
+	Global.bugid = cmd_line.getOptionValue("bugid");
+	String bugid = Global.bugid;
+    Global.repairtool = cmd_line.getOptionValue("repairtool");;
+    String repairtool = Global.repairtool;
+    Global.difftgendpath = cmd_line.getOptionValue("difftgendpath");
+    Global.evosuitejpath = cmd_line.getOptionValue("evosuitejpath");
+    Global.inputfpath = cmd_line.getOptionValue("inputfpath");
+    String inputfpath=Global.inputfpath;
+    Global.outputdpath = cmd_line.getOptionValue("outputdpath");
+    String outputdpath=Global.outputdpath;
+    Global.dependjpath = cmd_line.getOptionValue("dependjpath");
+    Global.oracleinputfpath = cmd_line.getOptionValue("oracleinputfpath");
+    String oracleinputfpath = Global.oracleinputfpath;   
+    int trials = Global.evosuitetrials;
+    int timeout = Global.evosuitetimeout;
 
 	
 	List<String> input_lines0 = null;
