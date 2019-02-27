@@ -56,24 +56,25 @@ public class Main
     int timeout = Global.evosuitetimeout;
 
 	
-	List<String> input_lines0 = null;
-	List<String> input_lines1 = null;
-	try { input_lines0 = FileUtils.readLines(new File(inputfpath), (String)null); }
+	List<String> inputDeltas = null;
+	List<String> oracles = null;
+	try { inputDeltas = FileUtils.readLines(new File(inputfpath), (String)null); }
 	catch (Throwable t) {
 	    System.err.println(t);
 	    t.printStackTrace();
 	}
-	if (input_lines0 == null) { return; }
-	try { input_lines1 = FileUtils.readLines(new File(oracleinputfpath), (String)null); }
+	if (inputDeltas == null) { return; }
+	
+	try { oracles = FileUtils.readLines(new File(oracleinputfpath), (String)null); }
 	catch (Throwable t) {
 	    System.err.println(t);
 	    t.printStackTrace();
 	}
-	if (input_lines1 == null) { return; }
+	if (oracles == null) { return; }
 
 
-	List<Modification> mod_list = SynDeltaParser.parse(input_lines0);
-	List<MethodToBeInstrumented> oracle_med_instru_list = OracleParser.parse(input_lines1);
+	List<Modification> mod_list = SynDeltaParser.parse(inputDeltas);
+	List<MethodToBeInstrumented> oracle_med_instru_list = OracleParser.parse(oracles);
 	if (mod_list != null && !mod_list.isEmpty() &&
 	    oracle_med_instru_list != null && !oracle_med_instru_list.isEmpty()) {
 	    Main m = new Main();
