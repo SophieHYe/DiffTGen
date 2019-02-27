@@ -62,93 +62,18 @@ public class Main
 	List<String> oracles = ReadInputs.readLine(oracleinputfpath);
 	
 
-	List<Modification> mod_list = SynDeltaParser.parse(inputDeltas);
+	List<Modification> modList = SynDeltaParser.parse(inputDeltas);
 	List<MethodToBeInstrumented> oracle_med_instru_list = OracleParser.parse(oracles);
-	if (mod_list != null && !mod_list.isEmpty() &&
+	if (modList != null && !modList.isEmpty() &&
 	    oracle_med_instru_list != null && !oracle_med_instru_list.isEmpty()) {
 	    Main m = new Main();
-	    m.testgen(bugid, repairtool, mod_list, oracle_med_instru_list, trials, timeout, outputdpath);
+	    m.testgen(bugid, repairtool, modList, oracle_med_instru_list, trials, timeout, outputdpath);
 	}
     }
 
-    private boolean init(String bugid, String repair_tool, List<Modification> mod_list, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
-	String testid = bugid + "_" + repair_tool.toLowerCase();
-	
-	//Set up the output directory
-	File output_root_dir = new File(output_root_dpath);
-	if (!output_root_dir.exists()) { output_root_dir.mkdir(); }
-	String output_dpath = output_root_dpath + "/" + testid;
-	File output_dir = new File(output_dpath);
-	if (!output_dir.exists()) { output_dir.mkdir(); }
-	File output_bug_dir = new File(output_dpath+"/bug");
-	File output_patch_dir = new File(output_dpath+"/patch");
-	File output_fix_dir = new File(output_dpath+"/fix");
-	File output_target_dir = new File(output_dpath+"/target");
-	File output_test_dir = new File(output_dpath+"/test");
-	File output_testcase_dir = new File(output_dpath+"/testcase");
-	if (!output_bug_dir.exists()) { output_bug_dir.mkdir(); }
-	if (!output_patch_dir.exists()) { output_patch_dir.mkdir(); }
-	if (!output_fix_dir.exists()) { output_fix_dir.mkdir(); }
-	if (!output_target_dir.exists()) { output_target_dir.mkdir(); }
-	if (!output_test_dir.exists()) { output_test_dir.mkdir(); }
-	if (!output_testcase_dir.exists()) { output_testcase_dir.mkdir(); }
 
-	//Copy change-related files to bug, patch & fix directories
-	Set<String> copied_set = new HashSet<String>();
-	for (Modification mod : mod_list) {
-	    String fppath = mod.getFPPath();
-	    if (fppath == null) { fppath = mod.getInsertDummyPath(); }
-	    if (fppath == null) { continue; }
-	    if (!copied_set.contains(fppath)) { //Don't copy twice
-		try {
-		    FileUtils.copyFileToDirectory(new File(fppath), output_bug_dir);
-		    copied_set.add(fppath);
-		} catch (Throwable t) {
-		    System.err.println("Failed copying the file: " + fppath);
-		    t.printStackTrace();
-		    System.err.println(t);
-		    return false;
-		}
-	    }
-
-	    String pppath = mod.getPPPath();
-	    if (pppath == null) { pppath = mod.getDelDummyPath(); }
-	    if (pppath == null) { continue; }
-	    if (!copied_set.contains(pppath)) { //Don't copy twice
-		try {
-		    FileUtils.copyFileToDirectory(new File(pppath), output_patch_dir);
-		    copied_set.add(pppath);
-		} catch (Throwable t) {
-		    System.err.println("Failed copying the file: " + pppath);
-		    t.printStackTrace();
-		    System.err.println(t);
-		    return false;
-		}
-	    }
-	}
-
-	for (MethodToBeInstrumented oracle_med_instru : oracle_med_instru_list) {
-	    String cppath = oracle_med_instru.getFilePath();
-	    if (cppath == null) { continue; }
-	    if (!copied_set.contains(cppath)) {
-		try {
-		    FileUtils.copyFileToDirectory(new File(cppath), output_fix_dir);
-		    copied_set.add(cppath);
-		}
-		catch (Throwable t) {
-		    System.err.println("Failed copying the file: " + cppath);
-		    t.printStackTrace();
-		    System.err.println(t);
-		    return false;
-		}
-	    }
-	}
-
-	return true;
-    }
-
-    public boolean createInstrumentedFiles(String bugid, String repair_tool, List<Modification> mod_list, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
+    public boolean createInstrumentedFiles(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
 	String testid = bugid + "_" + repair_tool.toLowerCase();
 	String proj_dpath = output_root_dpath + "/" + testid;
@@ -176,10 +101,10 @@ public class Main
 	Map<String, List<String>> mod_map_fp = new HashMap<String, List<String>>();
 	Map<String, List<String>> mod_map_pp = new HashMap<String, List<String>>();
 	Map<String, List<String>> mod_map_cp = new HashMap<String, List<String>>();
-	int mod_list_size = mod_list.size();
+	int modList_size = modList.size();
 	int oracle_med_instru_list_size = oracle_med_instru_list.size();
-	for (int i=0; i<mod_list_size; i++) {
-	    Modification mod = mod_list.get(i);
+	for (int i=0; i<modList_size; i++) {
+	    Modification mod = modList.get(i);
 	    String fppath = mod.getFPPath();
 	    String fploc = mod.getFPLoc();
 	    if (fppath == null) { fppath = mod.getInsertDummyPath(); }
@@ -308,7 +233,7 @@ public class Main
 	return true;
     }
 
-    private boolean compileInstrumentedFiles(String bugid, String repair_tool, List<Modification> mod_list, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
+    private boolean compileInstrumentedFiles(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
 	String testid = bugid + "_" + repair_tool.toLowerCase();
 	String proj_dpath = output_root_dpath + "/" + testid;
@@ -424,7 +349,7 @@ public class Main
 	return true;
     }
 
-    private boolean compileTestTargets(String bugid, String repair_tool, List<Modification> mod_list, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
+    private boolean compileTestTargets(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
 	String testid = bugid + "_" + repair_tool.toLowerCase();
 	String proj_dpath = output_root_dpath + "/" + testid;
@@ -557,7 +482,7 @@ public class Main
 	return true;
     }
     
-    public void testgen(String bugid, String repair_tool, List<Modification> mod_list,
+    public void testgen(String bugid, String repair_tool, List<Modification> modList,
 			List<MethodToBeInstrumented> oracle_med_instru_list,
 			int trials, int timeout, String output_root_dpath) {
 
@@ -565,7 +490,7 @@ public class Main
 	timer.start();
 
 	System.out.println("Initializing...");
-	boolean status0 = init(bugid, repair_tool, mod_list, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status0 = InitialParams.init(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
 	if (!status0) {
 	    System.err.println("Initialization Failure.");
 	    return;
@@ -574,7 +499,7 @@ public class Main
 
 
 	System.out.println("Creating Instrumented Files...");
-	boolean status1 = createInstrumentedFiles(bugid, repair_tool, mod_list, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status1 = createInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
 	if (!status1) {
 	    System.err.println("Create Instrumentation Files Failure.");
 	    return;
@@ -583,7 +508,7 @@ public class Main
 
 
 	System.out.println("Compiling Instrumented Files...");	
-	boolean status2 = compileInstrumentedFiles(bugid, repair_tool, mod_list, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status2 = compileInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
 	if (!status2) {
 	    System.err.println("Compiling Instrumented Files Failure.");
 	    return;
@@ -596,7 +521,7 @@ public class Main
 	String proj_dpath = output_root_dpath + "/" + testid;
 	String target_dpath = proj_dpath + "/target";
 	TestTargetGenerator ttgen = new TestTargetGenerator();
-	List<TestTarget> tt_list = ttgen.getTestTargets(mod_list);
+	List<TestTarget> tt_list = ttgen.getTestTargets(modList);
 	int tt_list_size = tt_list.size();
 	for (int i=0; i<tt_list_size; i++) {
 	    TestTarget tt = tt_list.get(i);
@@ -613,7 +538,7 @@ public class Main
 
 
 	System.out.println("Compiling Test Target(s)...");
-	boolean status3 = compileTestTargets(bugid, repair_tool, mod_list, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status3 = compileTestTargets(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
 	if (!status3) {
 	    System.err.println("Compiling Target Programs Failure.");
 	    return;
