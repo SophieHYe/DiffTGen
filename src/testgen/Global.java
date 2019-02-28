@@ -20,6 +20,7 @@ public class Global
     public static boolean simpletarget;
     public static boolean stopifoverfittingfound;
     public static boolean runevosuite;
+    public static String testID;
     
     
     static {
@@ -41,5 +42,6 @@ public class Global
 	simpletarget = false;
 	stopifoverfittingfound = false;
 	runevosuite = true;
+	testID="";
     }
 }
