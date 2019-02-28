@@ -13,6 +13,7 @@ import org.apache.commons.cli.CommandLine;
 
 public class Main
 {
+	public static String projectRootPath;
    
     public static void main(String[] args) {
 
@@ -43,6 +44,8 @@ public class Main
     String oracleinputfpath = Global.oracleinputfpath;   
     int trials = Global.evosuitetrials;
     int timeout = Global.evosuitetimeout;
+    Global.testID = bugid + "_" + repairtool.toLowerCase();
+    String projectRootPath=outputdpath + "/" + Global.testID;
 
 	/**
 	 * Read content from inputfpath and oracleinputfpath.
@@ -65,12 +68,12 @@ public class Main
     private boolean compileTestTargets(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
 	String testid = bugid + "_" + repair_tool.toLowerCase();
-	String proj_dpath = output_root_dpath + "/" + testid;
-	File proj_dir = new File(proj_dpath);
+	String projectRootPath = output_root_dpath + "/" + testid;
+	File proj_dir = new File(projectRootPath);
 	String dependjpath = Global.dependjpath;
 	String difftgendpath = Global.difftgendpath;
 
-	String target_dpath = proj_dpath+"/target";
+	String target_dpath = projectRootPath+"/target";
 	String target_build_dpath = target_dpath+"/build";
 	String target_build_classes_dpath = target_build_dpath+"/classes";
 	File target_build_dir = new File(target_build_dpath);
@@ -102,7 +105,7 @@ public class Main
 	String all0_fpath = target_build_classes_dpath+"/all0.jar";
 	File all0_f = new File(all0_fpath);
 	String[] cp_cmds0 = new String[] { "cp", dependjpath, all0_fpath };
-	int cp_exit_val = CommandExecutor.execute(cp_cmds0, new File(proj_dpath), null);
+	int cp_exit_val = CommandExecutor.execute(cp_cmds0, new File(projectRootPath), null);
 	if (cp_exit_val != 0) {
 	    System.err.println("Failed Copying the Dependency Jar File.");
 	    for (String cp_cmd0 : cp_cmds0) {
@@ -139,7 +142,7 @@ public class Main
 	return true;
     }
 
-    private boolean writeTestCaseToFile(TestCase tc, String proj_dpath) {
+    private boolean writeTestCaseToFile(TestCase tc, String projectRootPath) {
 	String tc_full_name = tc.getTestCaseFullName();
 	String rslt_tc_ctnt = tc.getTestCaseContent();
 	if (rslt_tc_ctnt == null) { return false; }
@@ -148,7 +151,7 @@ public class Main
 	int last_dot_index = tc_full_name.lastIndexOf(".");
 	if (last_dot_index == -1) { tc_name = tc_full_name; }
 	else { tc_name = tc_full_name.substring(last_dot_index+1); }
-	String rslt_tc_fpath = proj_dpath + "/testcase/" + tc_name + ".java";
+	String rslt_tc_fpath = projectRootPath + "/testcase/" + tc_name + ".java";
 	File rslt_tc_f = new File(rslt_tc_fpath);
 	try { FileUtils.writeStringToFile(rslt_tc_f, rslt_tc_ctnt, (String) null); }
 	catch (Throwable t) {
@@ -158,13 +161,13 @@ public class Main
 	return true;
     }
 
-    private boolean compileTestCases(String proj_dpath) {
+    private boolean compileTestCases(String projectRootPath) {
 
 	String difftgendpath = Global.difftgendpath;
 	String dependjpath = Global.dependjpath;
 	String libdpath = difftgendpath + "/lib";
 	String compilepath =
-	    ":"+proj_dpath+"/bug/instru1/build/classes:" //Instrumented Files First
+	    ":"+projectRootPath+"/bug/instru1/build/classes:" //Instrumented Files First
 	    +dependjpath+":"
 	    +libdpath+"/myprinter.jar:"
 	    +libdpath+"/commons-lang3-3.5.jar:"
@@ -172,7 +175,7 @@ public class Main
 	    +libdpath+"/evosuite-1.0.2.jar:"
 	    +libdpath+"/servlet.jar";
 
-	String tc_dpath = proj_dpath+"/testcase";
+	String tc_dpath = projectRootPath+"/testcase";
 	String tc_build_dpath = tc_dpath+"/build";
 	String tc_build_classes_dpath = tc_build_dpath+"/classes";
 	File tc_dir = new File(tc_dpath);
@@ -228,28 +231,11 @@ public class Main
 	}
 	System.out.println("Compiling Instrumented Files Done.");
 
-
 	System.out.println("Creating Test Target(s)...");
-	String testid = bugid + "_" + repair_tool.toLowerCase();
-	String proj_dpath = output_root_dpath + "/" + testid;
-	String target_dpath = proj_dpath + "/target";
-	TestTargetGenerator ttgen = new TestTargetGenerator();
-	List<TestTarget> tt_list = ttgen.getTestTargets(modList);
-	int tt_list_size = tt_list.size();
-	for (int i=0; i<tt_list_size; i++) {
-	    TestTarget tt = tt_list.get(i);
-	    System.out.println("Test Target No."+i+":");
-	    System.out.println(tt);
-	    File ttf = new File(target_dpath+"/"+tt.getFileName());
-	    try { FileUtils.writeStringToFile(ttf, tt.getFileContent(), (String)null); }
-	    catch (Throwable t) {
-		System.err.println(t);
-		t.printStackTrace();
-	    }
-	}
+	List<TestTarget> tt_list = CreateTestTargets.create(modList,output_root_dpath);
 	System.out.println("Creating Test Target(s) Done.");
-
-
+	
+	
 	System.out.println("Compiling Test Target(s)...");
 	boolean status3 = compileTestTargets(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
 	if (!status3) {
@@ -263,7 +249,7 @@ public class Main
 	boolean overfitting_break = Global.stopifoverfittingfound;
 	TestCaseGenerator tcgen = new TestCaseGenerator();
 	TestCase regression_tc = null, repair_tc = null, defective_tc = null;
-	for (int i=0; i<tt_list_size; i++) {
+	for (int i=0; i<tt_list.size(); i++) {
 	    TestTarget tt = tt_list.get(i);
 	    System.out.println("Working on Test Target No."+i+" for Test Case Generation.");
 	    List<TestCase> tc_list = tcgen.generateTestCases(i+"", tt);
@@ -301,22 +287,22 @@ public class Main
 	}
 
 	if (regression_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(regression_tc, proj_dpath);
+	    boolean write_tc = writeTestCaseToFile(regression_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Regression Test Case Failure."); }
 	}
 	if (repair_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(repair_tc, proj_dpath);
+	    boolean write_tc = writeTestCaseToFile(repair_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Repair Test Case Failure."); }
 	}
 	if (defective_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(defective_tc, proj_dpath);
+	    boolean write_tc = writeTestCaseToFile(defective_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Defective Test Case Failure."); }
 	}
 	System.out.println("Generating Test Case(s) Done");
 
 	
 	System.out.println("Compiling Test Case(s)...");
-	boolean status4 = compileTestCases(proj_dpath);
+	boolean status4 = compileTestCases(projectRootPath);
 	if (!status4) {
 	    System.err.println("Compiling Test Cases Failure.");
 	    return;
