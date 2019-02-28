@@ -62,122 +62,6 @@ public class Main
 
    
 
-    private boolean compileInstrumentedFiles(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
-
-	String testid = bugid + "_" + repair_tool.toLowerCase();
-	String proj_dpath = output_root_dpath + "/" + testid;
-	String dependjpath = Global.dependjpath;
-	String difftgendpath = Global.difftgendpath;
-	File proj_dir = new File(proj_dpath);	
-
-	String fp_instru0_build_dpath = proj_dpath+"/bug/instru0/build";
-	String pp_instru0_build_dpath = proj_dpath+"/patch/instru0/build";
-	String cp_instru0_build_dpath = proj_dpath+"/fix/instru0/build";
-	String fp_instru1_build_dpath = proj_dpath+"/bug/instru1/build";
-	String pp_instru1_build_dpath = proj_dpath+"/patch/instru1/build";
-	File fp_instru0_build_dir = new File(fp_instru0_build_dpath);
-	File pp_instru0_build_dir = new File(pp_instru0_build_dpath);
-	File cp_instru0_build_dir = new File(cp_instru0_build_dpath);
-	File fp_instru1_build_dir = new File(fp_instru1_build_dpath);
-	File pp_instru1_build_dir = new File(pp_instru1_build_dpath);
-	if (!fp_instru0_build_dir.exists()) {
-	    fp_instru0_build_dir.mkdir();
-	    (new File(fp_instru0_build_dpath+"/classes")).mkdir();
-	}
-	if (!pp_instru0_build_dir.exists()) {
-	    pp_instru0_build_dir.mkdir();
-	    (new File(pp_instru0_build_dpath+"/classes")).mkdir();
-	}
-	if (!cp_instru0_build_dir.exists()) {
-	    cp_instru0_build_dir.mkdir();
-	    (new File(cp_instru0_build_dpath+"/classes")).mkdir();
-	}
-	if (!fp_instru1_build_dir.exists()) {
-	    fp_instru1_build_dir.mkdir();
-	    (new File(fp_instru1_build_dpath+"/classes")).mkdir();
-	}
-	if (!pp_instru1_build_dir.exists()) {
-	    pp_instru1_build_dir.mkdir();
-	    (new File(pp_instru1_build_dpath+"/classes")).mkdir();
-	}
-
-	String libdpath = difftgendpath + "/lib";
-	String compilepath = ":"+dependjpath+":"
-	    +libdpath+"/myprinter.jar:"
-	    +libdpath+"/commons-lang3-3.5.jar:"
-	    +libdpath+"/junit-4.11.jar:"
-	    +libdpath+"/evosuite-1.0.2.jar:"
-	    +libdpath+"/servlet.jar";
-
-
-	String srcdpath0 = proj_dpath+"/bug/instru0";
-	String desdpath0 = fp_instru0_build_dpath+"/classes";
-	CompileResult comp_rslt0 = CompileExecutor.compile(proj_dir, compilepath, srcdpath0, desdpath0);
-	if (comp_rslt0.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Faulty Program's Output Instrumented Files.");
-	    String[] compile_cmds0 = comp_rslt0.getCompileCommands();
-	    for (String compile_cmd0 : compile_cmds0) {
-		System.err.print(compile_cmd0 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-	
-	String srcdpath1 = proj_dpath+"/patch/instru0";
-	String desdpath1 = pp_instru0_build_dpath+"/classes";
-	CompileResult comp_rslt1 = CompileExecutor.compile(proj_dir, compilepath, srcdpath1, desdpath1);
-	if (comp_rslt1.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Patched Program's Output Instrumented Files.");
-	    String[] compile_cmds1 = comp_rslt1.getCompileCommands();
-	    for (String compile_cmd1 : compile_cmds1) {
-		System.err.print(compile_cmd1 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	String srcdpath2 = proj_dpath+"/fix/instru0";
-	String desdpath2 = cp_instru0_build_dpath+"/classes";
-	CompileResult comp_rslt2 = CompileExecutor.compile(proj_dir, compilepath, srcdpath2, desdpath2);
-	if (comp_rslt2.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Oracle Program's Output Instrumented & Non-Instrumented Files.");
-	    String[] compile_cmds2 = comp_rslt2.getCompileCommands();
-	    for (String compile_cmd2 : compile_cmds2) {
-		System.err.print(compile_cmd2 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	String srcdpath3 = proj_dpath+"/bug/instru1";
-	String desdpath3 = fp_instru1_build_dpath+"/classes";
-	CompileResult comp_rslt3 = CompileExecutor.compile(proj_dir, compilepath, srcdpath3, desdpath3);
-	if (comp_rslt3.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Faulty Program's TestCase Instrumented Files.");
-	    String[] compile_cmds3 = comp_rslt3.getCompileCommands();
-	    for (String compile_cmd3 : compile_cmds3) {
-		System.err.print(compile_cmd3 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	String srcdpath4 = proj_dpath+"/patch/instru1";
-	String desdpath4 = pp_instru1_build_dpath+"/classes";
-	CompileResult comp_rslt4 = CompileExecutor.compile(proj_dir, compilepath, srcdpath4, desdpath4);
-	if (comp_rslt4.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Patched Program's TestCase Instrumented Files.");
-	    String[] compile_cmds4 = comp_rslt4.getCompileCommands();
-	    for (String compile_cmd4 : compile_cmds4) {
-		System.err.print(compile_cmd4 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	return true;
-    }
-
     private boolean compileTestTargets(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
 	String testid = bugid + "_" + repair_tool.toLowerCase();
@@ -337,7 +221,7 @@ public class Main
 
 
 	System.out.println("Compiling Instrumented Files...");	
-	boolean status2 = compileInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status2 = CompileInstrumentedFiles.compile(bugid, repair_tool, modList, oracle_med_instru_list, output_root_dpath);
 	if (!status2) {
 	    System.err.println("Compiling Instrumented Files Failure.");
 	    return;
