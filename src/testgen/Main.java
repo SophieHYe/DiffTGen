@@ -64,25 +64,6 @@ public class Main
     }
 
    
-    private boolean writeTestCaseToFile(TestCase tc, String projectRootPath) {
-	String tc_full_name = tc.getTestCaseFullName();
-	String rslt_tc_ctnt = tc.getTestCaseContent();
-	if (rslt_tc_ctnt == null) { return false; }
-	//Write to file
-	String tc_name = null;
-	int last_dot_index = tc_full_name.lastIndexOf(".");
-	if (last_dot_index == -1) { tc_name = tc_full_name; }
-	else { tc_name = tc_full_name.substring(last_dot_index+1); }
-	String rslt_tc_fpath = projectRootPath + "/testcase/" + tc_name + ".java";
-	File rslt_tc_f = new File(rslt_tc_fpath);
-	try { FileUtils.writeStringToFile(rslt_tc_f, rslt_tc_ctnt, (String) null); }
-	catch (Throwable t) {
-	    t.printStackTrace(); System.err.println(t);
-	    return false;
-	}
-	return true;
-    }
-
     private boolean compileTestCases(String projectRootPath) {
 
 	String difftgendpath = Global.difftgendpath;
@@ -209,15 +190,15 @@ public class Main
 	}
 
 	if (regression_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(regression_tc, projectRootPath);
+	    boolean write_tc = WriteTestCaseToFile.writetests(regression_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Regression Test Case Failure."); }
 	}
 	if (repair_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(repair_tc, projectRootPath);
+	    boolean write_tc = WriteTestCaseToFile.writetests(repair_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Repair Test Case Failure."); }
 	}
 	if (defective_tc != null) {
-	    boolean write_tc = writeTestCaseToFile(defective_tc, projectRootPath);
+	    boolean write_tc = WriteTestCaseToFile.writetests(defective_tc, projectRootPath);
 	    if (!write_tc) { System.out.println("Write Defective Test Case Failure."); }
 	}
 	System.out.println("Generating Test Case(s) Done");
