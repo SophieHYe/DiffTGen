@@ -59,7 +59,7 @@ public class TestCaseGeneratorTrial implements Callable<List<TestCase>>
 	boolean repair_found = false;
 	boolean defective_found = false;
 	String project_cp = //As EvoSuite running argument
-	    target_dpath+"/build/classes/all0.jar:"+
+	    target_dpath+"/build/classes:"+
 	    difftgendpath+"/lib/myprinter.jar:"+
 	    difftgendpath+"/lib/commons-lang3-3.5.jar";
 	    

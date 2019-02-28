@@ -55,11 +55,11 @@ public class Main
 	
 
 	List<Modification> modList = SynDeltaParser.parse(inputDeltas);
-	List<MethodToBeInstrumented> oracle_med_instru_list = OracleParser.parse(oracles);
+	List<MethodToBeInstrumented> oracleMedInstruList = OracleParser.parse(oracles);
 	if (modList != null && !modList.isEmpty() &&
-	    oracle_med_instru_list != null && !oracle_med_instru_list.isEmpty()) {
+	    oracleMedInstruList != null && !oracleMedInstruList.isEmpty()) {
 	    Main m = new Main();
-	    m.testgen(bugid, repairtool, modList, oracle_med_instru_list, trials, timeout, outputdpath);
+	    m.testgen(bugid, repairtool, modList, oracleMedInstruList, trials, timeout, outputdpath);
 	}
     }
 
@@ -102,14 +102,14 @@ public class Main
     }
     
     public void testgen(String bugid, String repair_tool, List<Modification> modList,
-			List<MethodToBeInstrumented> oracle_med_instru_list,
-			int trials, int timeout, String output_root_dpath) {
+			List<MethodToBeInstrumented> oracleMedInstruList,
+			int trials, int timeout, String outputPath) {
 
 	Timer timer = Global.timer;
 	timer.start();
 
 	System.out.println("Initializing...");
-	boolean status0 = InitialParams.init(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status0 = InitialParams.init(bugid, repair_tool, modList, oracleMedInstruList, trials, timeout, outputPath);
 	if (!status0) {
 	    System.err.println("Initialization Failure.");
 	    return;
@@ -118,7 +118,7 @@ public class Main
 
 
 	System.out.println("Creating Instrumented Files...");
-	boolean status1 = CreateInstrumentedFiles.createInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, output_root_dpath);
+	boolean status1 = CreateInstrumentedFiles.createInstrumentedFiles(bugid, repair_tool, modList, oracleMedInstruList, outputPath);
 	if (!status1) {
 	    System.err.println("Create Instrumentation Files Failure.");
 	    return;
@@ -127,7 +127,7 @@ public class Main
 
 
 	System.out.println("Compiling Instrumented Files...");	
-	boolean status2 = CompileInstrumentedFiles.compile(bugid, repair_tool, modList, oracle_med_instru_list, output_root_dpath);
+	boolean status2 = CompileInstrumentedFiles.compile(bugid, repair_tool, modList, oracleMedInstruList, outputPath);
 	if (!status2) {
 	    System.err.println("Compiling Instrumented Files Failure.");
 	    return;
@@ -135,12 +135,12 @@ public class Main
 	System.out.println("Compiling Instrumented Files Done.");
 
 	System.out.println("Creating Test Target(s)...");
-	List<TestTarget> tt_list = CreateTestTargets.create(modList,output_root_dpath);
+	List<TestTarget> testTargetList = CreateTestTargets.create(modList,outputPath);
 	System.out.println("Creating Test Target(s) Done.");
 	
 	
 	System.out.println("Compiling Test Target(s)...");
-	boolean status3 = CompileTestTargets.compile(modList, oracle_med_instru_list, output_root_dpath);
+	boolean status3 = CompileTestTargets.compile(modList, oracleMedInstruList, outputPath);
 	if (!status3) {
 	    System.err.println("Compiling Target Programs Failure.");
 	    return;
@@ -149,58 +149,7 @@ public class Main
 
 
 	System.out.println("Generating Test Case(s)...");
-	boolean overfitting_break = Global.stopifoverfittingfound;
-	TestCaseGenerator tcgen = new TestCaseGenerator();
-	TestCase regression_tc = null, repair_tc = null, defective_tc = null;
-	for (int i=0; i<tt_list.size(); i++) {
-	    TestTarget tt = tt_list.get(i);
-	    System.out.println("Working on Test Target No."+i+" for Test Case Generation.");
-	    List<TestCase> tc_list = tcgen.generateTestCases(i+"", tt);
-	    for (TestCase tc : tc_list) {
-		if (regression_tc == null && tc.isRegressionIndicative()) {
-		    regression_tc = tc;
-		}
-		if (repair_tc == null && tc.isRepairIndicative()) {
-		    repair_tc = tc;
-		}
-		if (defective_tc == null && tc.isDefectiveIndicative()) {
-		    defective_tc = tc;
-		}
-	    }
-	    if ((overfitting_break && (regression_tc!=null || defective_tc!=null)) ||
-	        (regression_tc!=null && repair_tc!=null && defective_tc!=null)) {
-		if (!timer.isReset()) {
-		    timer.end();
-		    System.out.println("Total execution time: " + timer.getDurationInMillis());
-		    timer.reset();
-		}
-		break;
-	    }
-	}
-
-	if (!timer.isReset()) {
-	    timer.end();
-	    System.out.println("Total execution time: " + timer.getDurationInMillis());
-	    timer.reset();
-	}
-
-	if (regression_tc==null && repair_tc==null && defective_tc==null) {
-	    System.out.println("Found Nothing.");
-	    return;
-	}
-
-	if (regression_tc != null) {
-	    boolean write_tc = WriteTestCaseToFile.writetests(regression_tc, projectRootPath);
-	    if (!write_tc) { System.out.println("Write Regression Test Case Failure."); }
-	}
-	if (repair_tc != null) {
-	    boolean write_tc = WriteTestCaseToFile.writetests(repair_tc, projectRootPath);
-	    if (!write_tc) { System.out.println("Write Repair Test Case Failure."); }
-	}
-	if (defective_tc != null) {
-	    boolean write_tc = WriteTestCaseToFile.writetests(defective_tc, projectRootPath);
-	    if (!write_tc) { System.out.println("Write Defective Test Case Failure."); }
-	}
+	AutomaticTestsGeneration.generateTest(timer, testTargetList, projectRootPath);
 	System.out.println("Generating Test Case(s) Done");
 
 	
