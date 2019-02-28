@@ -4,22 +4,11 @@ import util.*;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Iterator;
 import org.apache.commons.io.FileUtils;
 
 import CommandLine.CmdLineCheck;
 import CommandLine.CmdParse;
-
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
 
 
 public class Main
@@ -71,167 +60,7 @@ public class Main
 	}
     }
 
-
-
-    public boolean createInstrumentedFiles(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
-
-	String testid = bugid + "_" + repair_tool.toLowerCase();
-	String proj_dpath = output_root_dpath + "/" + testid;
-
-	String fp_instru0_dpath = proj_dpath + "/bug/instru0";
-	String pp_instru0_dpath = proj_dpath + "/patch/instru0";
-	String cp_instru0_dpath = proj_dpath + "/fix/instru0";
-	File fp_instru0_dir = new File(fp_instru0_dpath);
-	File pp_instru0_dir = new File(pp_instru0_dpath);
-	File cp_instru0_dir = new File(cp_instru0_dpath);
-	if (!fp_instru0_dir.exists()) { fp_instru0_dir.mkdir(); }
-	if (!pp_instru0_dir.exists()) { pp_instru0_dir.mkdir(); }
-	if (!cp_instru0_dir.exists()) { cp_instru0_dir.mkdir(); }
-	String fp_instru1_dpath = proj_dpath + "/bug/instru1";
-	String pp_instru1_dpath = proj_dpath + "/patch/instru1";
-	String cp_instru1_dpath = proj_dpath + "/fix/instru1";
-	File fp_instru1_dir = new File(fp_instru1_dpath);
-	File pp_instru1_dir = new File(pp_instru1_dpath);
-	File cp_instru1_dir = new File(cp_instru1_dpath);
-	if (!fp_instru1_dir.exists()) { fp_instru1_dir.mkdir(); }
-	if (!pp_instru1_dir.exists()) { pp_instru1_dir.mkdir(); }
-	if (!cp_instru1_dir.exists()) { cp_instru1_dir.mkdir(); }
-
-	//Group the modifications by files
-	Map<String, List<String>> mod_map_fp = new HashMap<String, List<String>>();
-	Map<String, List<String>> mod_map_pp = new HashMap<String, List<String>>();
-	Map<String, List<String>> mod_map_cp = new HashMap<String, List<String>>();
-	int modList_size = modList.size();
-	int oracle_med_instru_list_size = oracle_med_instru_list.size();
-	for (int i=0; i<modList_size; i++) {
-	    Modification mod = modList.get(i);
-	    String fppath = mod.getFPPath();
-	    String fploc = mod.getFPLoc();
-	    if (fppath == null) { fppath = mod.getInsertDummyPath(); }
-	    if (fploc == null) { fploc = mod.getInsertDummyCtxtLoc(); }
-	    String fpmloc = ASTHelper.getMethodLoc(fppath, fploc);
-	    //===============
-	    //System.err.println("fpmloc in Main: " + fpmloc);
-	    //===============
-	    List<String> fpmlocs = mod_map_fp.get(fppath);
-	    if (fpmlocs == null) {
-		fpmlocs = new ArrayList<String>();
-		mod_map_fp.put(fppath, fpmlocs);
-	    }
-	    if (!fpmlocs.contains(fpmloc)) { fpmlocs.add(fpmloc); }
-
-	    String pppath = mod.getPPPath();
-	    String pploc = mod.getPPLoc();
-	    if (pppath == null) { pppath = mod.getDelDummyPath(); }
-	    if (pploc == null) { pploc = mod.getDelDummyCtxtLoc(); }
-	    String ppmloc = ASTHelper.getMethodLoc(pppath, pploc);
-	    //===============
-	    //System.err.println("ppmloc in Main: " + ppmloc);
-	    //===============
-	    List<String> ppmlocs = mod_map_pp.get(pppath);
-	    if (ppmlocs == null) {
-		ppmlocs = new ArrayList<String>();
-		mod_map_pp.put(pppath, ppmlocs);
-	    }
-	    if (!ppmlocs.contains(ppmloc)) { ppmlocs.add(ppmloc); }
-	}
-
-	for (int i=0; i<oracle_med_instru_list_size; i++) {
-	    MethodToBeInstrumented med_instru = oracle_med_instru_list.get(i);
-	    String cpmloc = med_instru.getMethodLoc();
-	    //if (cpmloc == null) { continue; } //This is not for instrumentation.
-	    //===============
-	    //System.err.println("cpmloc in Main: " + cpmloc);
-	    //===============
-	    String cppath = med_instru.getFilePath();
-	    List<String> cpmlocs = mod_map_cp.get(cppath);
-	    if (cpmlocs == null) {
-		cpmlocs = new ArrayList<String>();
-		mod_map_cp.put(cppath, cpmlocs);
-	    }
-	    if (cpmloc!=null && !cpmlocs.contains(cpmloc)) { cpmlocs.add(cpmloc); }
-	}
-
-	ClassUnderTestInstrumentor cftg = new ClassUnderTestInstrumentor();
-	Iterator mod_map_fp_it = mod_map_fp.entrySet().iterator();
-	while (mod_map_fp_it.hasNext()) {
-	    Map.Entry<String, List<String>> entry = (Map.Entry<String, List<String>>) mod_map_fp_it.next();
-	    String fppath = entry.getKey();
-	    List<String> fpmlocs = entry.getValue();
-	    InstrumentedClass fp_oic = cftg.getOutputInstrumentedClass(fppath, fpmlocs);
-	    InstrumentedClass fp_tcic = cftg.getTestCaseInstrumentedClass(fppath, fpmlocs);
-	    String fp_oic_fpath = fp_instru0_dpath+"/"+fp_oic.getClassName()+".java";
-	    String fp_oic_fctnt = fp_oic.getInstrumentedClassContent();
-	    if (fp_oic_fctnt != null) {
-		try { FileUtils.writeStringToFile(new File(fp_oic_fpath), fp_oic_fctnt, (String)null); } catch (Throwable t) {
-		    System.err.println(t);
-		    t.printStackTrace();
-		}
-	    }
-
-	    String fp_tcic_fpath = fp_instru1_dpath+"/"+fp_tcic.getClassName()+".java";
-	    String fp_tcic_fctnt = fp_tcic.getInstrumentedClassContent();
-	    if (fp_tcic_fctnt != null) {
-		try { FileUtils.writeStringToFile(new File(fp_tcic_fpath), fp_tcic_fctnt, (String)null); } catch (Throwable t) {
-		    System.err.println(t);
-		    t.printStackTrace();
-		}
-	    }
-	}
-
-	Iterator mod_map_pp_it = mod_map_pp.entrySet().iterator();
-	while (mod_map_pp_it.hasNext()) {
-	    Map.Entry<String, List<String>> entry = (Map.Entry<String, List<String>>) mod_map_pp_it.next();
-	    String pppath = entry.getKey();
-	    List<String> ppmlocs = entry.getValue();
-	    InstrumentedClass pp_oic = cftg.getOutputInstrumentedClass(pppath, ppmlocs);
-	    InstrumentedClass pp_tcic = cftg.getTestCaseInstrumentedClass(pppath, ppmlocs);
-	    String pp_oic_fpath = pp_instru0_dpath+"/"+pp_oic.getClassName()+".java";
-	    String pp_oic_fctnt = pp_oic.getInstrumentedClassContent();
-	    if (pp_oic_fctnt != null) {
-		try { FileUtils.writeStringToFile(new File(pp_oic_fpath), pp_oic_fctnt, (String)null); } catch (Throwable t) {
-		    System.err.println(t);
-		    t.printStackTrace();
-		}
-	    }
-
-	    String pp_tcic_fpath = pp_instru1_dpath+"/"+pp_tcic.getClassName()+".java";
-	    String pp_tcic_fctnt = pp_tcic.getInstrumentedClassContent();
-	    if (pp_tcic_fctnt != null) {
-		try { FileUtils.writeStringToFile(new File(pp_tcic_fpath), pp_tcic_fctnt, (String)null); } catch (Throwable t) {
-		    System.err.println(t);
-		    t.printStackTrace();
-		}
-	    }
-	}
-
-	Iterator mod_map_cp_it = mod_map_cp.entrySet().iterator();
-	while (mod_map_cp_it.hasNext()) {
-	    Map.Entry<String, List<String>> entry = (Map.Entry<String, List<String>>) mod_map_cp_it.next();
-	    String cppath = entry.getKey();
-	    List<String> cpmlocs = entry.getValue();
-	    if (cpmlocs.isEmpty()) {
-		//Note that we still copy the uninstrumented file to its instrumentation directory. Later we compile all these files in the directory for running.
-		try { FileUtils.copyFileToDirectory(new File(cppath), new File(cp_instru0_dpath)); } catch (Throwable t) {
-		    System.err.println(t);
-		    t.printStackTrace();
-		}
-	    }
-	    else {
-		InstrumentedClass cp_oic = cftg.getOutputInstrumentedClass(cppath, cpmlocs);
-		String cp_oic_fpath = cp_instru0_dpath+"/"+cp_oic.getClassName()+".java";
-		String cp_oic_fctnt = cp_oic.getInstrumentedClassContent();
-		if (cp_oic_fctnt != null) {
-		    try { FileUtils.writeStringToFile(new File(cp_oic_fpath), cp_oic_fctnt, (String)null); } catch (Throwable t) {
-			System.err.println(t);
-			t.printStackTrace();
-		    }
-		}
-	    }
-	}
-
-	return true;
-    }
+   
 
     private boolean compileInstrumentedFiles(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
 
@@ -499,7 +328,7 @@ public class Main
 
 
 	System.out.println("Creating Instrumented Files...");
-	boolean status1 = createInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status1 = CreateInstrumentedFiles.createInstrumentedFiles(bugid, repair_tool, modList, oracle_med_instru_list, output_root_dpath);
 	if (!status1) {
 	    System.err.println("Create Instrumentation Files Failure.");
 	    return;
