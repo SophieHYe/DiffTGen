@@ -2,6 +2,15 @@
 
 DiffTGen is a testing technique which identifies test-suite-overfitted patches through test case generation.
 
+### Refactor Task
+| Issue|Type |Commit ID|Intention|Test Case|
+|----  | ----  | ----  |  ----     |----  |
+|[#2](https://github.com/SophieHYe/DiffTGen/issues/2)|  Refactor| [eff7805](https://github.com/SophieHYe/DiffTGen/commit/eff78054edee9bf9546417e59dcacf5f781b2c67)| Extract command mandatory options check |[CmdLineTest.java](https://github.com/SophieHYe/DiffTGen/commit/eff78054edee9bf9546417e59dcacf5f781b2c67#diff-2f41fc4fcb35bbbe3e0245b259632d7a)|
+|[#3](https://github.com/SophieHYe/DiffTGen/issues/3)|Refactor|[e906714](https://github.com/SophieHYe/DiffTGen/commit/e90671403fe2944ef6d9812788556eecb0add8cd)|Extract function of parse command |[CmdLineTest.java](https://github.com/SophieHYe/DiffTGen/commit/e90671403fe2944ef6d9812788556eecb0add8cd#diff-2f41fc4fcb35bbbe3e0245b259632d7a)|
+|[#4](https://github.com/SophieHYe/DiffTGen/issues/4)|Refactor|[564ce72](https://github.com/SophieHYe/DiffTGen/commit/564ce72d0db1dceea0e73c3c8d34078b3d5d3ebb)|Rename the variables|-|
+|[#5](https://github.com/SophieHYe/DiffTGen/issues/5)|Refactor|[5fc54a2](https://github.com/SophieHYe/DiffTGen/commit/5fc54a20944016c4bae0123ba2e0dc62ec9f5576)|Extract file read lines function|[ReadInputsTest.java](https://github.com/SophieHYe/DiffTGen/commit/5a441eaf568ca37171d966e7645c268101728979#diff-2299f3953b445285791b0e175ee08d9e)|
+
+
 ## Running Requirements
 
 + Linux environment
