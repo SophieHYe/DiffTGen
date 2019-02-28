@@ -64,84 +64,6 @@ public class Main
     }
 
    
-
-    private boolean compileTestTargets(String bugid, String repair_tool, List<Modification> modList, List<MethodToBeInstrumented> oracle_med_instru_list, int trials, int timeout, String output_root_dpath) {
-
-	String testid = bugid + "_" + repair_tool.toLowerCase();
-	String projectRootPath = output_root_dpath + "/" + testid;
-	File proj_dir = new File(projectRootPath);
-	String dependjpath = Global.dependjpath;
-	String difftgendpath = Global.difftgendpath;
-
-	String target_dpath = projectRootPath+"/target";
-	String target_build_dpath = target_dpath+"/build";
-	String target_build_classes_dpath = target_build_dpath+"/classes";
-	File target_build_dir = new File(target_build_dpath);
-	if (!target_build_dir.exists()) {
-	    target_build_dir.mkdir();
-	    new File(target_build_classes_dpath).mkdir();
-	}
-
-	String libdpath = difftgendpath + "/lib";
-	String compilepath = ":"+dependjpath+":"
-	    +libdpath+"/myprinter.jar:"
-	    +libdpath+"/commons-lang3-3.5.jar:"
-	    +libdpath+"/junit-4.11.jar:"
-	    +libdpath+"/evosuite-1.0.2.jar:"
-	    +libdpath+"/servlet.jar";
-
-	CompileResult comp_rslt = CompileExecutor.compile(proj_dir, compilepath, target_dpath, target_build_classes_dpath);
-	if (comp_rslt.getExitValue() != 0) {
-	    System.err.println("Failed Compiling Target Program Files.");
-	    String[] compile_cmds = comp_rslt.getCompileCommands();
-	    for (String compile_cmd : compile_cmds) {
-		System.err.print(compile_cmd + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	//Create a dependency jar file with target files updated (this is later used by the test generator)
-	String all0_fpath = target_build_classes_dpath+"/all0.jar";
-	File all0_f = new File(all0_fpath);
-	String[] cp_cmds0 = new String[] { "cp", dependjpath, all0_fpath };
-	int cp_exit_val = CommandExecutor.execute(cp_cmds0, new File(projectRootPath), null);
-	if (cp_exit_val != 0) {
-	    System.err.println("Failed Copying the Dependency Jar File.");
-	    for (String cp_cmd0 : cp_cmds0) {
-		System.err.print(cp_cmd0 + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	//Update the copied dependency jar file
-	List<String> jar_upt_cmd_list = new ArrayList<String>();
-	jar_upt_cmd_list.add("jar");
-	jar_upt_cmd_list.add("uf");
-	jar_upt_cmd_list.add("all0.jar");
-	File target_build_classes_dir = new File(target_build_classes_dpath);
-	File[] files_to_be_updated = target_build_classes_dir.listFiles();
-	for (File file_to_be_updated : files_to_be_updated) {
-	    String file_to_be_updated_name = file_to_be_updated.getName();
-	    if (file_to_be_updated.isDirectory() || file_to_be_updated_name.endsWith(".class")) {
-		jar_upt_cmd_list.add(file_to_be_updated_name);
-	    }
-	}
-	String[] jar_upt_cmds = jar_upt_cmd_list.toArray(new String[0]);
-	int jar_upt_exit_val = CommandExecutor.execute(jar_upt_cmds, target_build_classes_dir, null);
-	if (jar_upt_exit_val != 0) {
-	    System.err.println("Failed Updating the Copied Dependency Jar File.");
-	    for (String jar_upt_cmd : jar_upt_cmds) {
-		System.err.print(jar_upt_cmd + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-	
-	return true;
-    }
-
     private boolean writeTestCaseToFile(TestCase tc, String projectRootPath) {
 	String tc_full_name = tc.getTestCaseFullName();
 	String rslt_tc_ctnt = tc.getTestCaseContent();
@@ -237,7 +159,7 @@ public class Main
 	
 	
 	System.out.println("Compiling Test Target(s)...");
-	boolean status3 = compileTestTargets(bugid, repair_tool, modList, oracle_med_instru_list, trials, timeout, output_root_dpath);
+	boolean status3 = CompileTestTargets.compile(modList, oracle_med_instru_list, output_root_dpath);
 	if (!status3) {
 	    System.err.println("Compiling Target Programs Failure.");
 	    return;
