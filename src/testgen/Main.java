@@ -75,55 +75,31 @@ public class Main
 
 	System.out.println("Initializing...");
 	boolean status0 = InitialParams.init(bugid, repair_tool, modList, oracleMedInstruList, trials, timeout, outputPath);
-	if (!status0) {
-	    System.err.println("Initialization Failure.");
-	    return;
-	}
-	System.out.println("Initializing Done.");
-
+	ValidateState.validate(status0, "Initialization");
 
 	System.out.println("Creating Instrumented Files...");
 	boolean status1 = CreateInstrumentedFiles.createInstrumentedFiles(bugid, repair_tool, modList, oracleMedInstruList, outputPath);
-	if (!status1) {
-	    System.err.println("Create Instrumentation Files Failure.");
-	    return;
-	}
-	System.out.println("Creating Instrumented Files Done.");
-
+	ValidateState.validate(status1, "Creating Instrumented Files");
 
 	System.out.println("Compiling Instrumented Files...");	
 	boolean status2 = CompileInstrumentedFiles.compile(bugid, repair_tool, modList, oracleMedInstruList, outputPath);
-	if (!status2) {
-	    System.err.println("Compiling Instrumented Files Failure.");
-	    return;
-	}
-	System.out.println("Compiling Instrumented Files Done.");
+	ValidateState.validate(status2, "Compiling Instrumented Files");
 
 	System.out.println("Creating Test Target(s)...");
 	List<TestTarget> testTargetList = CreateTestTargets.create(modList,outputPath);
 	System.out.println("Creating Test Target(s) Done.");
-	
-	
+		
 	System.out.println("Compiling Test Target(s)...");
 	boolean status3 = CompileTestTargets.compile(modList, oracleMedInstruList, outputPath);
-	if (!status3) {
-	    System.err.println("Compiling Target Programs Failure.");
-	    return;
-	}
-	System.out.println("Compiling Test Target(s) Done.");
-
+	ValidateState.validate(status3, "Compiling Test Target(s)");
 
 	System.out.println("Generating Test Case(s)...");
 	AutomaticTestsGeneration.generateTest(timer, testTargetList, projectRootPath);
 	System.out.println("Generating Test Case(s) Done");
-
 	
 	System.out.println("Compiling Test Case(s)...");
 	boolean status4 = CompileTestCase.compile(projectRootPath);
-	if (!status4) {
-	    System.err.println("Compiling Test Cases Failure.");
-	    return;
-	}
-	System.out.println("Compiling Test Case(s) Done.");
+	ValidateState.validate(status4, "Compiling Test Case(s)");
+	
     }
 }
