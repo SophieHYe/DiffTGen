@@ -4,9 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import interfaces.CompilingInterface;
 import util.CommandExecutor;
 
-public class CompileTestTargets {
+public class CompileTestTargets implements CompilingInterface {
 	
 	private static String tmpBuildClassesPath;
 	private static String projectRootPath;
@@ -19,7 +20,7 @@ public class CompileTestTargets {
 		File projectDir = new File(projectRootPath);
 
 		String targetPath = projectRootPath + "/target";
-		String targetBuildClassesPath = targetPath + "/build/classes";
+		String targetBuildClassesPath = targetPath + "/build";
 		tmpBuildClassesPath = targetPath + "/build/tmp";
 
 		File targetBuildDir = new File(targetPath + "/build");
@@ -28,7 +29,7 @@ public class CompileTestTargets {
 			new File(targetBuildClassesPath).mkdir();
 			new File(tmpBuildClassesPath).mkdir();
 		}
-		String compilepath = getCompilePath();
+		String compilepath = new CompileTestTargets().getCompilePath(projectRootPath);
 		CompileResult compileResult = CompileExecutor.compile(projectDir, compilepath, targetPath,
 				tmpBuildClassesPath);
 		validateResult(compileResult);
@@ -41,7 +42,7 @@ public class CompileTestTargets {
 	private static void updateDependency(String targetBuildClassesPath) {
 		System.out.print("tmpBuildClassesPath "+tmpBuildClassesPath);
 		System.out.print("targetBuildClassesPath "+targetBuildClassesPath);
-		String[] dependUpdateCmd = new String[] { "cp", "-rf", tmpBuildClassesPath+"/", targetBuildClassesPath+"/" };
+		String[] dependUpdateCmd = new String[] { "cp", "-rf", tmpBuildClassesPath+"/", targetBuildClassesPath+"/classes" };
 		int updateDependencyResult = CommandExecutor.execute(dependUpdateCmd, new File(projectRootPath), null);		
 		validateIntResult(updateDependencyResult, dependUpdateCmd);
 	}
@@ -80,12 +81,14 @@ public class CompileTestTargets {
 
 	}
 
-	private static String getCompilePath() {
+	@Override
+	public String getCompilePath(String projectRootPath) {
 		String libdpath = Global.difftgendpath + "/lib";
 		String compilepath = ":" + Global.dependjpath + ":" + libdpath + "/myprinter.jar:" + libdpath
 				+ "/commons-lang3-3.5.jar:" + libdpath + "/junit-4.11.jar:" + libdpath + "/evosuite-1.0.2.jar:"
 				+ libdpath + "/servlet.jar";
 		return compilepath;
 	}
+
 
 }

@@ -2,14 +2,16 @@ package testgen;
 
 import java.io.File;
 
-public class CompileTestCase {
+import interfaces.CompilingInterface;
+
+public class CompileTestCase implements CompilingInterface {
 	
 	private static String difftgendpath= Global.difftgendpath;
 	private static String dependjpath= Global.dependjpath;
 
 	public static boolean compile(String projectRootPath) {
 
-		String compilepath = getCompilePath(projectRootPath);
+		String compilepath = new CompileTestCase().getCompilePath(projectRootPath);
 		String tc_dpath = projectRootPath+"/testcase";
 		String tc_build_dpath = tc_dpath+"/build";
 		String tc_build_classes_dpath = tc_build_dpath+"/classes";
@@ -33,7 +35,8 @@ public class CompileTestCase {
 		return true;
 	    }
 
-	private static String getCompilePath(String projectRootPath) {
+	@Override
+	public String getCompilePath(String projectRootPath) {
 		String libdpath = difftgendpath + "/lib";
 		String compilepath =
 		    ":"+projectRootPath+"/bug/instru1/build/classes:" //Instrumented Files First

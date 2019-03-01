@@ -3,7 +3,9 @@ package testgen;
 import java.io.File;
 import java.util.List;
 
-public class CompileInstrumentedFiles {
+import interfaces.CompilingInterface;
+
+public class CompileInstrumentedFiles implements CompilingInterface {
 	public static File projectFile;
 	public static String compilepath;
 
@@ -27,7 +29,7 @@ public class CompileInstrumentedFiles {
 		 * get the dependency jar files for compiling
 		 */
 
-		compilepath = getCompileDependency(Global.difftgendpath, Global.dependjpath);
+		compilepath = new CompileInstrumentedFiles().getCompilePath(projectPath);
 
 		/*
 		 * compile each component
@@ -59,13 +61,6 @@ public class CompileInstrumentedFiles {
 
 	}
 
-	private static String getCompileDependency(String difftgendpath, String dependjpath) {
-		String libdpath = difftgendpath + "/lib";
-		String compilepath = ":" + dependjpath + ":" + libdpath + "/myprinter.jar:" + libdpath
-				+ "/commons-lang3-3.5.jar:" + libdpath + "/junit-4.11.jar:" + libdpath + "/evosuite-1.0.2.jar:"
-				+ libdpath + "/servlet.jar";
-		return compilepath;
-	}
 
 	public static void createBuildPath(String projectPath, String instruID, String type) {
 		String build_dpath = projectPath + "/" + type + "/" + instruID + "/build";
@@ -74,6 +69,15 @@ public class CompileInstrumentedFiles {
 			build_dir.mkdir();
 			(new File(build_dpath + "/classes")).mkdir();
 		}
+	}
+
+	@Override
+	public String getCompilePath(String projectRootPath) {
+		String libdpath = Global.difftgendpath + "/lib";
+		String compilepath = ":" + Global.dependjpath + ":" + libdpath + "/myprinter.jar:" + libdpath
+				+ "/commons-lang3-3.5.jar:" + libdpath + "/junit-4.11.jar:" + libdpath + "/evosuite-1.0.2.jar:"
+				+ libdpath + "/servlet.jar";
+		return compilepath;
 	}
 
 }
