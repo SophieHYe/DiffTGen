@@ -45,7 +45,7 @@ public class Main
     int trials = Global.evosuitetrials;
     int timeout = Global.evosuitetimeout;
     Global.testID = bugid + "_" + repairtool.toLowerCase();
-    String projectRootPath=outputdpath + "/" + Global.testID;
+    projectRootPath=outputdpath + "/" + Global.testID;
 
 	/**
 	 * Read content from inputfpath and oracleinputfpath.
@@ -64,42 +64,7 @@ public class Main
     }
 
    
-    private boolean compileTestCases(String projectRootPath) {
-
-	String difftgendpath = Global.difftgendpath;
-	String dependjpath = Global.dependjpath;
-	String libdpath = difftgendpath + "/lib";
-	String compilepath =
-	    ":"+projectRootPath+"/bug/instru1/build/classes:" //Instrumented Files First
-	    +dependjpath+":"
-	    +libdpath+"/myprinter.jar:"
-	    +libdpath+"/commons-lang3-3.5.jar:"
-	    +libdpath+"/junit-4.11.jar:"
-	    +libdpath+"/evosuite-1.0.2.jar:"
-	    +libdpath+"/servlet.jar";
-
-	String tc_dpath = projectRootPath+"/testcase";
-	String tc_build_dpath = tc_dpath+"/build";
-	String tc_build_classes_dpath = tc_build_dpath+"/classes";
-	File tc_dir = new File(tc_dpath);
-	File tc_build_dir = new File(tc_build_dpath);
-	File tc_build_classes_dir = new File(tc_build_classes_dpath);
-	if (!tc_build_dir.exists()) { tc_build_dir.mkdir(); }
-	if (!tc_build_classes_dir.exists()) { tc_build_classes_dir.mkdir(); }
-
-	CompileResult comp_rslt = CompileExecutor.compile(tc_dir, compilepath, tc_dpath, tc_build_classes_dpath);
-	if (comp_rslt.getExitValue() != 0) {
-	    System.err.println("Failed Compiling the Test Cases.");
-	    String[] comp_cmds = comp_rslt.getCompileCommands();
-	    for (String comp_cmd : comp_cmds) {
-		System.err.print(comp_cmd + " ");
-	    }
-	    System.err.println();
-	    return false;
-	}
-
-	return true;
-    }
+    
     
     public void testgen(String bugid, String repair_tool, List<Modification> modList,
 			List<MethodToBeInstrumented> oracleMedInstruList,
@@ -154,7 +119,7 @@ public class Main
 
 	
 	System.out.println("Compiling Test Case(s)...");
-	boolean status4 = compileTestCases(projectRootPath);
+	boolean status4 = CompileTestCase.compile(projectRootPath);
 	if (!status4) {
 	    System.err.println("Compiling Test Cases Failure.");
 	    return;
