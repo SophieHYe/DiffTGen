@@ -21,7 +21,8 @@ In this forked reporsitory, we conduct the refactoring tasks for the source code
 |[#12](https://github.com/SophieHYe/DiffTGen/issues/12)|Refactor|[9982600](https://github.com/SophieHYe/DiffTGen/commit/99826007785c378636d777e831750680d8d72c37)|Extract the method of writing test case|[WriteTestCaseTest.java](https://github.com/SophieHYe/DiffTGen/commit/99826007785c378636d777e831750680d8d72c37#diff-b5ec2d6512e7178491c8900ff556e934)|
 |[#13](https://github.com/SophieHYe/DiffTGen/issues/13)|Refactor|[97dd145](https://github.com/SophieHYe/DiffTGen/commit/97dd145fcf3fde52296ba02969349a1b5b55e989)|Extract the method of automatically generate test case|[AutomaticTestsGenerationTest.java](https://github.com/SophieHYe/DiffTGen/commit/97dd145fcf3fde52296ba02969349a1b5b55e989#diff-21a5467a3b9c5c01809186ecaedbd06e)|
 |[#14](https://github.com/SophieHYe/DiffTGen/issues/14)|Refactor|[7607b2d](https://github.com/SophieHYe/DiffTGen/commit/7607b2d5ffe15baec0a7a3d3e82b5af9f8eb3bc8)|Extract the method of compiling test cases|[CompileTestCaseTest.java](https://github.com/SophieHYe/DiffTGen/commit/7607b2d5ffe15baec0a7a3d3e82b5af9f8eb3bc8#diff-a061e5a7036e8b733b5c44f4400cdf5c)|
-
+|[#15](https://github.com/SophieHYe/DiffTGen/issues/15)|Refactor|[1d50d93](https://github.com/SophieHYe/DiffTGen/commit/1d50d93d187bb913c2b5f1b15dcc5ec3eb186535)|Extract the common method of validate process status|-|
+|[#16](https://github.com/SophieHYe/DiffTGen/issues/16)|Refactor|[0feaef9](https://github.com/SophieHYe/DiffTGen/commit/0feaef9546cfba84becb39e7f9cd611093750e53)|Extract interface for compiling classes|-|
 
 
 ## Running Requirements
