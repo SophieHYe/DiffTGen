@@ -222,19 +222,27 @@ public class ClassUnderTestInstrumentor
 	    String mloc = mlocs.get(i);
 	    //===============
 	    //System.err.println("mloc in classundertestinstrumentor: " + mloc);
-	    //===============	    
-	    ASTNode mnode = ASTNodeFinder.find(cu, mloc).get(0);
-	    if (!(mnode instanceof MethodDeclaration)) {
-		System.err.println("Located Node is NOT a method.");
-		System.err.println("File Path: " + fpath);
-		System.err.println("Method Loc: " + mloc);
-		continue;
-	    }
+	    //===============
+	    List<ASTNode> list = ASTNodeFinder.find(cu, mloc);
+	    ASTNode mnode = null;
+	    if(list.size()>0) {
+	    	mnode = list.get(0);
+	 	    if (!(mnode instanceof MethodDeclaration)) {
+	 		System.err.println("Located Node is NOT a method.");
+	 		System.err.println("File Path: " + fpath);
+	 		System.err.println("Method Loc: " + mloc);
+	 		continue;
+	 	    }
+	 	   MethodDeclaration tmd = (MethodDeclaration) mnode;
+		    String tmd_sigid = getMethodSignatureId(tmd);
+		    if (instru_msigids.contains(tmd_sigid)) { continue; } //avoid instru twice
+		    else { instru_msigids.add(tmd_sigid); } 
+	 	    
+	 	    
+	   
+	   
 	
-	    MethodDeclaration tmd = (MethodDeclaration) mnode;
-	    String tmd_sigid = getMethodSignatureId(tmd);
-	    if (instru_msigids.contains(tmd_sigid)) { continue; } //avoid instru twice
-	    else { instru_msigids.add(tmd_sigid); }
+	    
 	    
 	    String tmd_name = tmd.getName().getIdentifier();
 	    MethodDeclaration tmd0 = tmd;
@@ -261,7 +269,7 @@ public class ClassUnderTestInstrumentor
 		}
 	    }
 	}
-	
+	}
 	//Get the new content
 	Document doc = new Document(fctnt);
 	TextEdit tedit = rw.rewriteAST(doc, null);
@@ -269,9 +277,11 @@ public class ClassUnderTestInstrumentor
 	catch (Exception e) {
 	    System.err.println("Text Edit Apply Error: "+e);
 	}
-	
+	 
 	return new InstrumentedClass(atd.getName().getIdentifier(), doc.get());
-    }
+    
+	
+	}
 
     private ASTRewrite instrumentNonInstrumentedMUT(int ic_type, MethodDeclaration tmd, ASTRewrite rw) {
 
