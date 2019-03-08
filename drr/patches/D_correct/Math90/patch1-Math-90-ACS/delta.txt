@@ -1,2 +1,2 @@
 /drr/patches/D_correct/Math90/bug/Frequency.java:110,1
-/drr/patches/D_correct/Math90/patch1-Math-90-ACS/patch/Frequency.java:110,1
+/drr/patches/D_correct/Math90/patch1-Math-90-ACS/patch/Frequency.java:130,1

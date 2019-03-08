@@ -1,2 +1,5 @@
-/drr/patches/D_correct/Lang50/bug/:,1
-/drr/patches/D_correct/Lang50/patch1-Lang-50-SimFix/patch/:,1
+/drr/patches/D_correct/Lang50/bug/FastDateFormat.java:465,1
+/drr/patches/D_correct/Lang50/patch1-Lang-50-SimFix/patch/FastDateFormat.java:472,1
+
+/drr/patches/D_correct/Lang50/bug/FastDateFormat.java:285,1
+/drr/patches/D_correct/Lang50/patch1-Lang-50-SimFix/patch/FastDateFormat.java:296,1

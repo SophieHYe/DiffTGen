@@ -53,14 +53,17 @@ Lang,33,src/main/java/org/apache/commons/lang3/ClassUtils.java,910
 Lang,35,src/main/java/org/apache/commons/lang3/ArrayUtils.java,3292
 Lang,38,src/java/org/apache/commons/lang3/time/FastDateFormat.java,869
 Lang,39,src/java/org/apache/commons/lang3/StringUtils.java,3676
+Lang,41,src/java/org/apache/commons/lang/ClassUtils.java,191
 Lang,43,src/java/org/apache/commons/lang/text/ExtendedMessageFormat.java,421
 Lang,44,src/java/org/apache/commons/lang/NumberUtils.java,145
 Lang,45,src/java/org/apache/commons/lang/WordUtils.java,616
+Lang,50,src/java/org/apache/commons/lang/time/FastDateFormat.java,285
 Lang,51,src/java/org/apache/commons/lang/BooleanUtils.java,680
 Lang,55,src/java/org/apache/commons/lang/time/StopWatch.java,117
 Lang,57,src/java/org/apache/commons/lang/LocaleUtils.java,223
 Lang,58,src/java/org/apache/commons/lang/math/NumberUtils.java,454
 Lang,59,src/java/org/apache/commons/lang/text/StrBuilder.java,884
+Lang,60,src/java/org/apache/commons/lang/text/StrBuilder.java,1673
 Lang,61,src/java/org/apache/commons/lang/text/StrBuilder.java,1776
 Math,2,src/main/java/org/apache/commons/math3/distribution/HypergeometricDistribution.java,268
 Math,5,src/main/java/org/apache/commons/math3/complex/Complex.java,305
@@ -107,6 +110,7 @@ Mockito,34,src/org/mockito/internal/invocation/InvocationMatcher.java,106
 Mockito,38,src/org/mockito/internal/verification/argumentmatching/ArgumentMatchingTool.java,48
 Time,4,src/main/java/org/joda/time/Partial.java,464
 Time,7,src/main/java/org/joda/time/format/DateTimeFormatter.java,707
+Time,15,src/main/java/org/joda/time/field/FieldUtils.java,138
 Time,16,src/main/java/org/joda/time/format/DateTimeFormatter.java,709
 Time,19,src/main/java/org/joda/time/DateTimeZone.java,900
 
