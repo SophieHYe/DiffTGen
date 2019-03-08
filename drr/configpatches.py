@@ -100,8 +100,8 @@ def travFolder(dir):
                         elif os.path.exists(d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build/classes"):
                                 os.system("cp -rf "+d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build/classes/  "+ bugfolder+"/classes") 
 
-                        elif os.path.exists(d4jfolder+"/"+projectId+"_"+bugId+"_buggy/classes"):
-                                os.system("cp -rf "+d4jfolder+"/"+projectId+"_"+bugId+"_buggy/classes/  "+ bugfolder+"/classes") 
+                        elif os.path.exists(d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build"):
+                                os.system("cp -rf "+d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build/  "+ bugfolder+"/classes") 
 
                                 #delete the fix files
                         # if os.path.exists(d4jfolder):
@@ -120,5 +120,5 @@ def travFolder(dir):
 if __name__ == '__main__':
         #change to your defects4j patch
         d4jpath="/Users/sophie/Documents/defects4j/framework/bin"
-        travFolder("./D_correct_DS")
+        travFolder("./test")
 
