@@ -22,7 +22,9 @@ def travFolder(dir,dataset,difftgenpath):
                            lines = rfile.readlines()
                            for line in lines:
                                    if line!="":
-                                           tmpcode=tmpcode+difftgenpath+line
+                                           if "/drr" in line:
+                                                   line=line.replace("/drr",difftgenpath+"/drr")               
+                                                   tmpcode=tmpcode+line
                    with open("./tmpDelta.txt", 'w') as wfile:
                            wfile.write(tmpcode)
                    
@@ -30,12 +32,11 @@ def travFolder(dir,dataset,difftgenpath):
                            lines = rofile.readlines()
                            for line in lines:
                                    if line!="":
-                                           tmpOracle=tmpOracle+difftgenpath+line
+                                            if "/drr" in line:
+                                                   line=line.replace("/drr",difftgenpath+"/drr")               
+                                                   tmpOracle=tmpOracle+line
                    with open("./tmpOracle.txt", 'w') as wofile:
                            wofile.write(tmpOracle)
-
-
-
 
                    script="sh run -bugid  "+patchId+projectId+bugId
                    script=script+"  -repairtool  "+toolId
@@ -45,15 +46,14 @@ def travFolder(dir,dataset,difftgenpath):
                    script=script+"  -outputdpath  "+difftgenpath+"/drr/patches/"+dataset+"/"+projectId+bugId+"/"+filename
                    script=script+"  -inputfpath  "+difftgenpath+"/tmpDelta.txt"
                    script=script+"  -oracleinputfpath  "+difftgenpath+"/tmpOracle.txt"
+                   print script
                    os.system(script)
 
-                   if os.path.exists("./tmpDelta.txt"):
-                           os.system("rm tmpDelta.txt")
-                   if os.path.exists("./tmpOracle.txt"):
-                           os.system("rm tmpOracle.txt")
+                #    if os.path.exists("./tmpDelta.txt"):
+                #            os.system("rm tmpDelta.txt")
+                #    if os.path.exists("./tmpOracle.txt"):
+                #            os.system("rm tmpOracle.txt")
 
-
-                #    os.system("sh run -bugid 1 -repairtool patch1-arja -difftgendpath /Users/sophie/Documents/DiffTGen -evosuitejpath /Users/sophie/Documents/DiffTGen/lib -dependjpath /Users/sophie/Documents/DiffTGen/tmp/lang_51_buggy/target/classes -outputdpath /Users/sophie/Documents/DiffTGen/ -inputfpath /Users/sophie/Documents/DiffTGen/examples/lang51nopol_delta0.txt -oracleinputfpath /Users/sophie/Documents/DiffTGen/examples/lang51nopol_oracle.txt")
        else:
            if '.DS_Store' not in f:
                 travFolder(dir+f, dataset,difftgenpath)
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         difftgenpath=sys.argv[2]
         dir="./drr/D_correct_DS"
         if dataset=="D_correct":
-                dir="./drr/test"
+                dir="./drr/D_correct"
         elif dataset=="D_incorrect":
                 dir="./drr/D_incorrect_DS"
         travFolder(dir,dataset, difftgenpath)

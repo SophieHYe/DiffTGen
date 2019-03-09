@@ -1,2 +1,2 @@
-/drr/patches/D_correct/Chart24/bug/GrayPaintScale.java:126,1
-/drr/patches/D_correct/Chart24/patch1-Chart-24-Jaid/patch/GrayPaintScale.java:123,1
+/drr/patches/D_correct/Chart24/bug/GrayPaintScale.java:126,8
+null(/drr/patches/D_correct/Chart24/patch1-Chart-24-Jaid/patch/GrayPaintScale.java:126,8;after)

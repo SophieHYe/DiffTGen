@@ -25,6 +25,7 @@ def travFolder(dir):
                         targetfile=""
                         linenumber=""
                         sourcefile=""
+                        
                         with open("./metadata.csv") as metadata:
                                 lines = metadata.readlines()
                                 for line in lines:
@@ -39,16 +40,50 @@ def travFolder(dir):
                                 print projectId+bugId+" has NO INFO!!"
 
                         patchlineNo=linenumber
+                        addcount=0
+                        minuscount=0
                         with open(os.path.join(dir, f)) as patch:
                                 lines = patch.readlines()
                                 line3=lines[2].split(" ")[1]
                                 line3=line3.split(",")[0]
                                 patchlineNo=line3.split("-")[1]
+                                for l in lines:
+                                        if "+"==l[0]:
+                                                #ignore +++
+                                                if "+" !=l[1]:
+                                                #ignore comment
+                                                        if "//" not in l:
+                                                                addcount = addcount+1
+                                        if "-"==l[0]:
+                                                #ignore ---
+                                                if "-" !=l[1]:
+                                                        minuscount=minuscount+1
 
+                        patchlineNo=int(patchlineNo)+3
+                        ##replace
+                        if addcount>0:
+                                if minuscount>0:
+                                        with open(patchfolder+"/delta.txt","w") as delta:
+                                                delta.write("/drr"+bugfolder.split(".")[-1]+"/bug/"+targetfile+":"+linenumber+",8\n")
+                                                delta.write("/drr"+patchfolder.split(".")[-1]+"/patch/"+targetfile+":"+str(patchlineNo)+",8")
 
-                        with open(patchfolder+"/delta.txt","w") as delta:
-                                delta.write("/drr"+bugfolder.split(".")[-1]+"/bug/"+targetfile+":"+linenumber+",1\n")
-                                delta.write("/drr"+patchfolder.split(".")[-1]+"/patch/"+targetfile+":"+patchlineNo+",1")
+                        ###add
+                        if addcount>0:
+                                if minuscount==0:
+                                        with open(patchfolder+"/delta.txt","w") as delta:
+                                                delta.write("/drr"+bugfolder.split(".")[-1]+"/bug/"+targetfile+":"+linenumber+",8\n")
+                                                delta.write("null(/drr"+patchfolder.split(".")[-1]+"/patch/"+targetfile+":"+str(patchlineNo)+",8;after)")
+                        
+                        ###delete
+                        if addcount==0:
+                                if minuscount>0:
+                                        with open(patchfolder+"/delta.txt","w") as delta:
+                                                delta.write("null(/drr"+bugfolder.split(".")[-1]+"/bug/"+targetfile+":"+linenumber+",8;before)\n")
+                                                delta.write("/drr"+patchfolder.split(".")[-1]+"/patch/"+targetfile+":"+str(patchlineNo)+",8")
+                       
+                       
+                       
+                       
                         #create oracle.txt file one for per bug!
                         with open(bugfolder+"/oracle.txt","w") as oracle:
                                 oracle.write("/drr"+bugfolder.split(".")[-1]+"/fix/"+targetfile+":"+linenumber+",1\n")
@@ -70,8 +105,10 @@ def travFolder(dir):
                         #checkout defects4j 
                         
                         d4jfolder=bugfolder+"/defects4j"
+
+                        
                         if not os.path.exists(d4jfolder):
-                                os.system("cd  "+bugfolder);
+                                os.system("cd  "+bugfolder)
                                 os.system("mkdir "+d4jfolder)
                                 os.system(d4jpath+"/defects4j checkout  -p "+projectId +"  -v "+bugId+"b  -w  "+d4jfolder+"/"+projectId+"_"+bugId+"_buggy");
                                 os.system(d4jpath+"/defects4j checkout  -p "+projectId +"  -v "+bugId+"f  -w  "+d4jfolder+"/"+projectId+"_"+bugId+"_fix");
@@ -103,9 +140,9 @@ def travFolder(dir):
                         elif os.path.exists(d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build"):
                                 os.system("cp -rf "+d4jfolder+"/"+projectId+"_"+bugId+"_buggy/build/  "+ bugfolder+"/classes") 
 
-                                #delete the fix files
-                        # if os.path.exists(d4jfolder):
-                        #         os.system("rm -rf  "+d4jfolder)
+                        #delete the defects4j files
+                        if os.path.exists(d4jfolder):
+                                os.system("rm -rf  "+d4jfolder)
 
 
 
@@ -120,5 +157,5 @@ def travFolder(dir):
 if __name__ == '__main__':
         #change to your defects4j patch
         d4jpath="/Users/sophie/Documents/defects4j/framework/bin"
-        travFolder("./test")
+        travFolder("./D_correct_DS")
 
