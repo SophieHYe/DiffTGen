@@ -65,7 +65,7 @@ if __name__ == '__main__':
         difftgenpath=sys.argv[2]
         dir="./drr/D_correct_DS"
         if dataset=="D_correct":
-                dir="./drr/D_correct"
+                dir="./drr/D_correct_DS"
         elif dataset=="D_incorrect":
                 dir="./drr/D_incorrect_DS"
         travFolder(dir,dataset, difftgenpath)
