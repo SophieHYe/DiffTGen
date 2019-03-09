@@ -7,7 +7,7 @@ import testgen.Global;
 public class CmdLineCheck {
 	
 	public static void verifyEmpty(CommandLine cmd){
-		String params ="bugid,repairtool,difftgendpath,scriptrootdpath,d4jprojdpath,evosuitejpath";
+		String params ="bugid,repairtool,difftgendpath,evosuitejpath";
 		String[] paramsList = params.split(",");
 		for(int i=0;i<paramsList.length;i++) {			
 				if(cmd.hasOption(paramsList[i])) {
