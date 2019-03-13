@@ -12,7 +12,7 @@ public class ASTNodeFinder
 {
     public static List<ASTNode> find(CompilationUnit cu, String loc) {
 	List<ASTNode> rslt_list = new ArrayList<ASTNode>();
-	if (cu == null) { return rslt_list; }
+	if (cu == null||loc==null) { return rslt_list; }
 	String[] sublocs = loc.split(";");
 	for (String subloc : sublocs) {
 	    String[] subloc_items = subloc.split(":");

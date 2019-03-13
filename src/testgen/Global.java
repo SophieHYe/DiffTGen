@@ -40,7 +40,7 @@ public class Global
 	forcecompile = true;
 	runparallel = false;
 	simpletarget = false;
-	stopifoverfittingfound = false;
+	stopifoverfittingfound = true;
 	runevosuite = true;
 	testID="";
     }
