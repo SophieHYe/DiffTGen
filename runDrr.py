@@ -47,8 +47,15 @@ def travFolder(dir,dataset,difftgenpath):
                    script=script+"  -inputfpath  "+difftgenpath+"/tmpDelta.txt"
                    script=script+"  -oracleinputfpath  "+difftgenpath+"/tmpOracle.txt"
                    print script
-                   os.system(script)
+		   log=""
+                   log=os.popen(script).read()
+		   print log
+		   with open('./log/D_correct/'+filename+'.txt', 'w') as logfile:
+			   logfile.write(log)
+			
 
+
+		
                 #    if os.path.exists("./tmpDelta.txt"):
                 #            os.system("rm tmpDelta.txt")
                 #    if os.path.exists("./tmpOracle.txt"):
@@ -65,7 +72,7 @@ if __name__ == '__main__':
         difftgenpath=sys.argv[2]
         dir="./drr/D_correct_DS"
         if dataset=="D_correct":
-                dir="./drr/D_correct_DS"
+                dir="./drr/test"
         elif dataset=="D_incorrect":
                 dir="./drr/D_incorrect_DS"
         travFolder(dir,dataset, difftgenpath)
