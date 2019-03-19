@@ -309,7 +309,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * For population size {@code N}, number of successes {@code m}, and sample
      * size {@code n}, the mean is {@code n * m / N}.
      */
-    public double getNumericalMean_7au3e() {
+    public double getNumericalMean() {
         return (double) (getSampleSize() * getNumberOfSuccesses()) / (double) getPopulationSize();
     }
 
@@ -376,27 +376,4 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
     public boolean isSupportConnected() {
         return true;
     }
-
-	/**
-	 * {@inheritDoc} For population size  {@code  N} , number of successes  {@code  m} , and sample size  {@code  n} , the mean is  {@code  n * m / N} .
-	 */
-	public double getNumericalMean() {
-		Object o_7au3e = null;
-		String c_7au3e = "org.apache.commons.math3.distribution.HypergeometricDistribution";
-		String msig_7au3e = "getNumericalMean()" + eid_getNumericalMean_7au3e;
-		try {
-			o_7au3e = getNumericalMean_7au3e();
-			FieldPrinter.print(o_7au3e, eid_getNumericalMean_7au3e, c_7au3e,
-					msig_7au3e, 0, 5);
-			FieldPrinter.print(this, eid_getNumericalMean_7au3e, c_7au3e,
-					msig_7au3e, 1, 5);
-		} catch (Throwable t7au3e) {
-			FieldPrinter.print(t7au3e, eid_getNumericalMean_7au3e, c_7au3e,
-					msig_7au3e, 0, 5);
-			throw t7au3e;
-		} finally {
-			eid_getNumericalMean_7au3e++;
-		}
-		return (double) o_7au3e;
-	}
 }

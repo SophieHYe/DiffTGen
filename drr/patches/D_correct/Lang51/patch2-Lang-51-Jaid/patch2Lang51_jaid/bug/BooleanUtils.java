@@ -669,6 +669,10 @@ public class BooleanUtils {
             }
             case 3: {
                 char ch = str.charAt(0);
+                if((ch == 'y') == false){
+                	return ch == 'Y';
+
+                	}
                 if (ch == 'y') {
                     return 
                         (str.charAt(1) == 'e' || str.charAt(1) == 'E') &&

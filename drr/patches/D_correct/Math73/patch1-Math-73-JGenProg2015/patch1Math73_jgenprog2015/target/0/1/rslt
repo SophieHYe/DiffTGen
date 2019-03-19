@@ -1,0 +1,32 @@
+* EvoSuite 1.0.2
+* Going to generate test cases for class: org.apache.commons.math.analysis.solvers.BrentSolver
+* Starting client
+* Connecting to master process on port 19538
+* Analyzing classpath: 
+  - /home/wasp/Desktop/ICSE18/DiffTGen/drr/patches/D_correct/Math73/patch1-Math-73-JGenProg2015/patch1Math73_jgenprog2015/target/build/classes
+  - /home/wasp/Desktop/ICSE18/DiffTGen/lib/myprinter.jar
+  - /home/wasp/Desktop/ICSE18/DiffTGen/lib/commons-lang3-3.5.jar
+* Finished analyzing classpath
+* Generating tests for class org.apache.commons.math.analysis.solvers.BrentSolver
+* Test criteria:
+  - Line Coverage
+  - Branch Coverage
+  - Exception
+  - Mutation testing (weak)
+  - Method-Output Coverage
+  - Top-Level Method Coverage
+  - No-Exception Top-Level Method Coverage
+  - Context Branch Coverage
+* Setting up search algorithm for whole suite generation
+* Total number of test goals: 
+  - Line 98
+  - Branch 56
+  - Exception 0
+  - MutationFactory 888
+  - Output 15
+  - Method 6
+  - MethodNoException 6
+  - CBranchFitnessFactory 56
+[Progress:>                             0%] [Cov:>                                  0%]* Using seed 1552995918166
+* Starting evolution
+[Progress:>                             0%] [Cov:>                                  1%][Progress:>                             0%] [Cov:=>                                 3%][Progress:>                             0%] [Cov:=====>                             15%][Progress:>                             0%] [Cov:======>                            18%][Progress:>                             0%] [Cov:=======>                           21%][Progress:>                             0%] [Cov:=======>                           22%][Progress:>                             1%] [Cov:>                                  0%][Progress:>                             1%] [Cov:>                                  1%][Progress:>                             1%] [Cov:====>                              14%][Progress:>                             1%] [Cov:=====>                             15%][Progress:>                             1%] [Cov:======>                            19%][Progress:>                             1%] [Cov:=========>                         26%][Progress:>                             1%] [Cov:===========>                       34%][Progress:>                             1%] [Cov:============>                      35%][Progress:>                             1%] [Cov:============>                      36%][Progress:>                             1%] [Cov:============>                      37%][Progress:>                             1%] [Cov:=============>                     38%][Progress:>                             1%] [Cov:===============>                   45%][Progress:>                             1%] [Cov:==================>                52%][Progress:>                             1%] [Cov:==================>                53%][Progress:>                             3%] [Cov:>                                  1%][Progress:>                             3%] [Cov:====>                              14%][Progress:>                             3%] [Cov:=====>                             15%][Progress:>                             3%] [Cov:=====>                             16%][Progress:>                             3%] [Cov:=====>                             17%][Progress:>                             3%] [Cov:======>                            18%][Progress:>                             3%] [Cov:==================>                53%]* Computation finished
