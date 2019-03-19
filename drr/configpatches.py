@@ -13,7 +13,7 @@ def travFolder(dir):
                         projectId=arraynames[1] 
                         bugId=arraynames[2]
                         toolId=arraynames[3] 
-                        bugfolder="./patches/D_correct/"+projectId+bugId
+                        bugfolder="./patches/D_incorrect/"+projectId+bugId
                         if not os.path.exists(bugfolder):
                                 os.system("mkdir "+bugfolder) 
                         patchfolder=bugfolder+"/"+filename
@@ -33,7 +33,7 @@ def travFolder(dir):
                                         if projectId==data[0]:
                                                 if bugId==data[1]:
                                                         targetfile=data[2].split('/')[-1]
-                                                        linenumber=data[3].replace("\n","")
+                                                        linenumber=data[3].replace("\\n","").replace('\t','').replace('\r\n','')                                                                                                             
                                                         sourcefile=data[2]
 
                         if targetfile=="":
@@ -105,8 +105,7 @@ def travFolder(dir):
                         #checkout defects4j 
                         
                         d4jfolder=bugfolder+"/defects4j"
-
-                        
+                       
                         if not os.path.exists(d4jfolder):
                                 os.system("cd  "+bugfolder)
                                 os.system("mkdir "+d4jfolder)
@@ -144,10 +143,7 @@ def travFolder(dir):
                         if os.path.exists(d4jfolder):
                                 os.system("rm -rf  "+d4jfolder)
 
-
-
-
-                        
+                      
 
        else:
            if '.DS_Store' not in f:
@@ -157,5 +153,5 @@ def travFolder(dir):
 if __name__ == '__main__':
         #change to your defects4j patch
         d4jpath="/Users/sophie/Documents/defects4j/framework/bin"
-        travFolder("./D_correct_DS")
+        travFolder("./D_incorrect_DS")
 
