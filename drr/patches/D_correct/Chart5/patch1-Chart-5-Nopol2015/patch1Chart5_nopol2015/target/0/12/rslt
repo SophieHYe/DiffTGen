@@ -1,0 +1,72 @@
+* EvoSuite 1.0.2
+* Going to generate test cases for class: org.jfree.data.xy.XYSeries
+* Starting client
+* Connecting to master process on port 20368
+* Analyzing classpath: 
+  - /home/wasp/Desktop/ICSE18/DiffTGen/drr/patches/D_correct/Chart5/patch1-Chart-5-Nopol2015/patch1Chart5_nopol2015/target/build/classes
+  - /home/wasp/Desktop/ICSE18/DiffTGen/lib/myprinter.jar
+  - /home/wasp/Desktop/ICSE18/DiffTGen/lib/commons-lang3-3.5.jar
+* Finished analyzing classpath
+* Generating tests for class org.jfree.data.xy.XYSeries
+* Test criteria:
+  - Line Coverage
+  - Branch Coverage
+  - Exception
+  - Mutation testing (weak)
+  - Method-Output Coverage
+  - Top-Level Method Coverage
+  - No-Exception Top-Level Method Coverage
+  - Context Branch Coverage
+* Setting up search algorithm for whole suite generation
+* Total number of test goals: 
+  - Line 168
+  - Branch 103
+  - Exception 0
+  - MutationFactory 504
+  - Output 90
+  - Method 34
+  - MethodNoException 34
+[Progress:>                             0%] [Cov:>                                  0%]  - CBranchFitnessFactory 103
+* Using seed 1553015798834
+* Starting evolution
+[Progress:>                             3%] [Cov:>                                  0%][Progress:>                             3%] [Cov:>                                  1%][Progress:>                             3%] [Cov:====>                              13%][Progress:>                             3%] [Cov:=====>                             16%][Progress:>                             3%] [Cov:=====>                             17%][Progress:>                             3%] [Cov:======>                            18%][Progress:=>                            5%] [Cov:>                                  2%][Progress:=>                            5%] [Cov:=>                                 5%][Progress:=>                            5%] [Cov:=====>                             17%][Progress:=>                            5%] [Cov:======>                            19%][Progress:=>                            5%] [Cov:=======>                           21%][Progress:=>                            5%] [Cov:========>                          23%][Progress:=>                            5%] [Cov:========>                          24%][Progress:=>                            6%] [Cov:=>                                 3%][Progress:=>                            6%] [Cov:=>                                 5%][Progress:=>                            6%] [Cov:======>                            18%][Progress:=>                            6%] [Cov:=======>                           21%][Progress:=>                            6%] [Cov:========>                          23%][Progress:=>                            6%] [Cov:========>                          24%][Progress:=>                            6%] [Cov:========>                          25%][Progress:=>                            6%] [Cov:=======>                           22%][Progress:=>                            6%] [Cov:========>                          23%][Progress:=>                            6%] [Cov:========>                          25%][Progress:==>                           8%] [Cov:================>                  48%][Progress:==>                           8%] [Cov:=================>                 49%][Progress:===>                          10%] [Cov:================>                  46%][Progress:===>                          10%] [Cov:=================>                 51%][Progress:===>                          10%] [Cov:=================>                 51%][Progress:===>                          11%] [Cov:=================>                 50%][Progress:===>                          11%] [Cov:=================>                 51%][Progress:===>                          11%] [Cov:==================>                52%][Progress:===>                          11%] [Cov:==================>                52%][Progress:===>                          13%] [Cov:==================>                52%][Progress:===>                          13%] [Cov:==================>                53%][Progress:===>                          13%] [Cov:==================>                53%][Progress:===>                          13%] [Cov:==================>                53%][Progress:===>                          13%] [Cov:===================>               56%][Progress:===>                          13%] [Cov:===================>               57%][Progress:===>                          13%] [Cov:====================>              59%][Progress:===>                          13%] [Cov:=====================>             61%][Progress:====>                         15%] [Cov:=====================>             60%][Progress:====>                         15%] [Cov:=====================>             61%][Progress:====>                         15%] [Cov:=====================>             61%][Progress:====>                         15%] [Cov:=====================>             61%][Progress:====>                         15%] [Cov:=====================>             61%][Progress:====>                         15%] [Cov:=====================>             62%][Progress:====>                         16%] [Cov:=====================>             61%][Progress:====>                         16%] [Cov:=====================>             62%][Progress:====>                         16%] [Cov:=====================>             62%][Progress:====>                         16%] [Cov:======================>            63%][Progress:====>                         16%] [Cov:======================>            64%][Progress:=====>                        18%] [Cov:=====================>             62%][Progress:=====>                        18%] [Cov:======================>            63%][Progress:=====>                        18%] [Cov:======================>            64%][Progress:=====>                        18%] [Cov:======================>            65%][Progress:=====>                        18%] [Cov:======================>            65%][Progress:======>                       20%] [Cov:======================>            65%][Progress:======>                       20%] [Cov:======================>            65%][Progress:======>                       20%] [Cov:======================>            65%][Progress:======>                       20%] [Cov:======================>            65%][Progress:======>                       21%] [Cov:======================>            65%][Progress:======>                       21%] [Cov:=======================>           66%][Progress:======>                       21%] [Cov:=======================>           67%][Progress:======>                       21%] [Cov:=======================>           67%][Progress:======>                       23%] [Cov:=======================>           67%][Progress:======>                       23%] [Cov:=======================>           67%][Progress:======>                       23%] [Cov:=======================>           68%][Progress:======>                       23%] [Cov:========================>          69%][Progress:======>                       23%] [Cov:========================>          70%][Progress:=======>                      25%] [Cov:=======================>           67%][Progress:=======>                      25%] [Cov:========================>          71%]
+* User requested search stop
+[Progress:=======>                      25%] [Cov:========================>          71%][Progress:=======>                      25%] [Cov:=========================>         73%]
+* Search finished after 15s and 26 generations, 10969 statements, best individual has fitness: 256.842020588761
+* Minimizing test suite
+* Going to analyze the coverage criteria
+* Coverage analysis for criterion LINE
+* Coverage of criterion LINE: 79%
+* Total number of goals: 168
+* Number of covered goals: 132
+* Coverage analysis for criterion BRANCH
+* Coverage of criterion BRANCH: 79%
+* Total number of goals: 103
+* Number of covered goals: 81
+* Coverage analysis for criterion EXCEPTION
+* Coverage of criterion EXCEPTION: 100%
+* Total number of goals: 27
+* Number of covered goals: 27
+* Coverage analysis for criterion WEAKMUTATION
+* Coverage of criterion WEAKMUTATION: 86%
+* Total number of goals: 504
+* Number of covered goals: 433
+* Coverage analysis for criterion OUTPUT
+* Coverage of criterion OUTPUT: 14%
+* Total number of goals: 90
+* Number of covered goals: 13
+* Coverage analysis for criterion METHOD
+* Coverage of criterion METHOD: 100%
+* Total number of goals: 34
+* Number of covered goals: 34
+* Coverage analysis for criterion METHODNOEXCEPTION
+* Coverage of criterion METHODNOEXCEPTION: 82%
+* Total number of goals: 34
+* Number of covered goals: 28
+* Coverage analysis for criterion CBRANCH
+* Coverage of criterion CBRANCH: 69%
+* Total number of goals: 103
+* Number of covered goals: 71
+* Generated 59 tests with total length 212
+* Resulting test suite's coverage: 73% (average coverage for all fitness functions)
+* Compiling and checking tests
