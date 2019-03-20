@@ -669,11 +669,15 @@ public class BooleanUtils {
             }
             case 3: {
                 char ch = str.charAt(0);
-                if (ch == 'y') {
-                    delta_syn_3nz5e_0: if (true) {
+                if((ch == 'y') == false){
+                	delta_syn_3nz5e_0: if (true) {
 						int delta_syn_3nz5e_0 = -1;
 					}
-					return 
+					return ch == 'Y';
+
+                	}
+                if (ch == 'y') {
+                    return 
                         (str.charAt(1) == 'e' || str.charAt(1) == 'E') &&
                         (str.charAt(2) == 's' || str.charAt(2) == 'S');
                 }
